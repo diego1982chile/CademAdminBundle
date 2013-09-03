@@ -36,17 +36,7 @@ class Usuario extends BaseUser
      *   @ORM\JoinColumn(name="CLIENTE_ID", referencedColumnName="ID")
      * })
      */
-    private $cliente;
-	
-	/**
-     * @var \Rol
-     *
-     * @ORM\ManyToOne(targetEntity="Rol", inversedBy="usuarios")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ROL_ID", referencedColumnName="ID")
-     * })
-     */
-    private $rol;
+    private $cliente;		
 
     /**
      *
@@ -122,23 +112,7 @@ class Usuario extends BaseUser
     public function getCliente()
     {
         return $this->cliente;
-    }
-	
-	/**
-     * Get rol
-     *
-     * @return \Cadem\adminBundle\Entity\Rol 
-     */
-    public function getRol()
-    {
-        return $this->rol;
-    }
-	
-	 public function __construct()
-    {
-        parent::__construct();
-        // your own logic
-    }
+    }	
 
     /**
      * Get clienteid
@@ -162,30 +136,7 @@ class Usuario extends BaseUser
         
         return $this;
     }
-	
-	/**
-     * Get rolid
-     *
-     * @return integer 
-     */
-    public function getRolId()
-    {
-        return $this->rolid;
-    }
-
-    /**
-     * Set rolid
-     *
-     * @param integer $rolid
-     * @return Usuario
-     */
-    public function setRolId($rolid)
-    {
-        $this->rolid = $rolid;
-        
-        return $this;
-    }		
-	
+				
 	/**
      * Get createdAt
      *

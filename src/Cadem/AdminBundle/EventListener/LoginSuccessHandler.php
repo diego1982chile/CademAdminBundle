@@ -24,6 +24,7 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 	
 	public function onAuthenticationSuccess(Request $request, TokenInterface $token)
 	{
+		print_r("ENTRE");
 		
 		if ($this->security->isGranted('ROLE_SUPER_ADMIN'))
 		{
@@ -33,12 +34,8 @@ class LoginSuccessHandler implements AuthenticationSuccessHandlerInterface
 			$this->security->setToken(null);
 			$request->getSession()->invalidate();
 		}
-		else if ($this->security->isGranted('ROLE_ADMIN'))
-		{
-			$response = new RedirectResponse($this->router->generate('admin_carga_item'));
-		} 
 		else if ($this->security->isGranted('ROLE_USER'))
-		{
+		{			
 			// redirect the user to where they were before the login process begun.
 			// $referer_url = $request->headers->get('referer');
 			$referer_url = $this->router->generate('dashboard_index');
