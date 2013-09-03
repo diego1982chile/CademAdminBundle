@@ -1,0 +1,14 @@
+parameters:
+    database_driver: pdo_sqlsrv
+    database_host: 200.29.139.244
+    database_port: null
+    database_name: CADEM_MAESTRA
+    database_user: admin
+    database_password: Jgh240482710
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: null
+    mailer_password: null
+    locale: en
+    secret: 1c6e7c2f0f0cc7b707ee83261c2966204f5b68bd
+    database_path: null
