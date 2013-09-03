@@ -1,0 +1,30 @@
+auditorsala:
+    pattern:  /
+    defaults: { _controller: "CademAdminBundle:Auditorsala:index" }
+
+auditorsala_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "CademAdminBundle:Auditorsala:show" }
+
+auditorsala_new:
+    pattern:  /new
+    defaults: { _controller: "CademAdminBundle:Auditorsala:new" }
+
+auditorsala_create:
+    pattern:  /create
+    defaults: { _controller: "CademAdminBundle:Auditorsala:create" }
+    requirements: { _method: post }
+
+auditorsala_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "CademAdminBundle:Auditorsala:edit" }
+
+auditorsala_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "CademAdminBundle:Auditorsala:update" }
+    requirements: { _method: post|put }
+
+auditorsala_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "CademAdminBundle:Auditorsala:delete" }
+    requirements: { _method: post|delete }

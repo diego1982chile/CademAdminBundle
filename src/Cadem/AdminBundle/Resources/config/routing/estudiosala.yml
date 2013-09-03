@@ -1,0 +1,30 @@
+estudiosala:
+    pattern:  /
+    defaults: { _controller: "CademAdminBundle:Estudiosala:index" }
+
+estudiosala_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "CademAdminBundle:Estudiosala:show" }
+
+estudiosala_new:
+    pattern:  /new
+    defaults: { _controller: "CademAdminBundle:Estudiosala:new" }
+
+estudiosala_create:
+    pattern:  /create
+    defaults: { _controller: "CademAdminBundle:Estudiosala:create" }
+    requirements: { _method: post }
+
+estudiosala_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "CademAdminBundle:Estudiosala:edit" }
+
+estudiosala_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "CademAdminBundle:Estudiosala:update" }
+    requirements: { _method: post|put }
+
+estudiosala_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "CademAdminBundle:Estudiosala:delete" }
+    requirements: { _method: post|delete }

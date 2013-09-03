@@ -1,0 +1,30 @@
+sala:
+    pattern:  /
+    defaults: { _controller: "CademAdminBundle:Sala:index" }
+
+sala_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "CademAdminBundle:Sala:show" }
+
+sala_new:
+    pattern:  /new
+    defaults: { _controller: "CademAdminBundle:Sala:new" }
+
+sala_create:
+    pattern:  /create
+    defaults: { _controller: "CademAdminBundle:Sala:create" }
+    requirements: { _method: post }
+
+sala_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "CademAdminBundle:Sala:edit" }
+
+sala_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "CademAdminBundle:Sala:update" }
+    requirements: { _method: post|put }
+
+sala_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "CademAdminBundle:Sala:delete" }
+    requirements: { _method: post|delete }

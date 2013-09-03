@@ -1,0 +1,7 @@
+parameters:
+#    cadem_admin.example.class: Cadem\AdminBundle\Example
+
+services:
+#    cadem_admin.example:
+#        class: %cadem_admin.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

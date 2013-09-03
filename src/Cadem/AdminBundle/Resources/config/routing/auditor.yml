@@ -1,0 +1,30 @@
+auditor:
+    pattern:  /
+    defaults: { _controller: "CademAdminBundle:Auditor:index" }
+
+auditor_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "CademAdminBundle:Auditor:show" }
+
+auditor_new:
+    pattern:  /new
+    defaults: { _controller: "CademAdminBundle:Auditor:new" }
+
+auditor_create:
+    pattern:  /create
+    defaults: { _controller: "CademAdminBundle:Auditor:create" }
+    requirements: { _method: post }
+
+auditor_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "CademAdminBundle:Auditor:edit" }
+
+auditor_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "CademAdminBundle:Auditor:update" }
+    requirements: { _method: post|put }
+
+auditor_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "CademAdminBundle:Auditor:delete" }
+    requirements: { _method: post|delete }

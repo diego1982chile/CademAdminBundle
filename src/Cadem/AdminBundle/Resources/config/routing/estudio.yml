@@ -1,0 +1,30 @@
+estudio:
+    pattern:  /
+    defaults: { _controller: "CademAdminBundle:Estudio:index" }
+
+estudio_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "CademAdminBundle:Estudio:show" }
+
+estudio_new:
+    pattern:  /new
+    defaults: { _controller: "CademAdminBundle:Estudio:new" }
+
+estudio_create:
+    pattern:  /create
+    defaults: { _controller: "CademAdminBundle:Estudio:create" }
+    requirements: { _method: post }
+
+estudio_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "CademAdminBundle:Estudio:edit" }
+
+estudio_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "CademAdminBundle:Estudio:update" }
+    requirements: { _method: post|put }
+
+estudio_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "CademAdminBundle:Estudio:delete" }
+    requirements: { _method: post|delete }

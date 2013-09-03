@@ -1,0 +1,35 @@
+item:
+    pattern:  /
+    defaults: { _controller: "CademAdminBundle:Item:index" }
+
+item_show:
+    pattern:  /{id}/show
+    defaults: { _controller: "CademAdminBundle:Item:show" }
+
+item_new:
+    pattern:  /new
+    defaults: { _controller: "CademAdminBundle:Item:new" }
+
+item_create:
+    pattern:  /create
+    defaults: { _controller: "CademAdminBundle:Item:create" }
+    requirements: { _method: post }
+
+item_edit:
+    pattern:  /{id}/edit
+    defaults: { _controller: "CademAdminBundle:Item:edit" }
+
+item_update:
+    pattern:  /{id}/update
+    defaults: { _controller: "CademAdminBundle:Item:update" }
+    requirements: { _method: post|put }
+
+item_delete:
+    pattern:  /{id}/delete
+    defaults: { _controller: "CademAdminBundle:Item:delete" }
+    requirements: { _method: post|delete }
+
+item_body:
+    pattern:  /item
+    defaults: { _controller: "CademAdminBundle:Item:body" }
+    requirements: { _method: get }

@@ -1,0 +1,49 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Auditor list</h1>
+
+    <table class="records_list">
+        <thead>
+            <tr>        
+				<th>Id</th>
+                <th>Nombre</th>
+				<th>Código</th>
+				<th>Rol</th>
+				<th>Supervisor</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td><a href="{{ path('auditor_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>                
+                <td>{{ entity.nombre }}</td>
+				<td>{{ entity.codigo }}</td>
+				<td>{{ entity.rol }}</td>
+				<td>{{ entity.supervisor }}</td>
+                <td>{{ entity.activo }}</td>
+                <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('auditor_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('auditor_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('auditor_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

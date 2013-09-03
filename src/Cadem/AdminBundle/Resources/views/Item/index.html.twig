@@ -1,0 +1,29 @@
+{% extends '::base.html.twig' %}
+
+{% block body -%}
+    <h1>Item list</h1>
+
+    <table class="records_list display table table-striped table-bordered" cellpadding="0" cellspacing="0" border="0">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>				
+                <th>Codigo</th>
+				<th>Marca</th>
+				<th>Fabricante</th>
+                <th>Activo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>        
+        </tbody>
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('item_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

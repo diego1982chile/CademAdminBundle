@@ -1,0 +1,28 @@
+root:
+    path:     /
+    defaults:
+        _controller: FrameworkBundle:Redirect:Redirect
+        route: fos_user_security_login
+        permanent: true
+#DASHBOARD
+dashboard_index:
+    pattern:  /dashboard
+    defaults: { _controller: CademAdminBundle:Dashboard:index }
+CademAdminBundle_usuario:
+    resource: "@CademAdminBundle/Resources/config/routing/usuario.yml"
+    prefix:   /usuario
+CademAdminBundle_auditor:
+    resource: "@CademAdminBundle/Resources/config/routing/auditor.yml"
+    prefix:   /auditor
+CademAdminBundle_sala:
+    resource: "@CademAdminBundle/Resources/config/routing/sala.yml"
+    prefix:   /sala
+CademAdminBundle_estudio:
+    resource: "@CademAdminBundle/Resources/config/routing/estudio.yml"
+    prefix:   /estudio	
+CademAdminBundle_auditorsala:
+     resource: "@CademAdminBundle/Resources/config/routing/auditorsala.yml"
+     prefix:  /auditorsala	
+CademAdminBundle_estudiosala:
+    resource: "@CademAdminBundle/Resources/config/routing/estudiosala.yml"
+    prefix:   /estudiosala	 

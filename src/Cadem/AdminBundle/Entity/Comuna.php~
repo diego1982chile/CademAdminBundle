@@ -1,0 +1,208 @@
+<?php
+
+namespace Cadem\AdminBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+/**
+ * Comuna
+ *
+ * @ORM\Table(name="COMUNA")
+ * @ORM\Entity
+ */
+class Comuna
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="ID", type="integer", nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+	
+	/**
+     * @var integer
+     *
+     * @ORM\Column(name="PROVINCIA_ID", type="integer", nullable=false)
+     */
+    private $provincia_id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="NOMBRE", type="string", length=64, nullable=false)
+     */
+    private $nombre;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="ACTIVO", type="boolean", nullable=false)
+     */
+    private $activo;
+
+    /**
+     * @var \Provincia
+     *
+     * @ORM\ManyToOne(targetEntity="Provincia", inversedBy="comunas")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="PROVINCIA_ID", referencedColumnName="ID")
+     * })
+     */
+    private $provincia;
+	
+	/**
+     * @ORM\OneToMany(targetEntity="Sala", mappedBy="comuna")
+     */
+	 
+	protected $salas;
+	
+	public function __construct()
+    {
+        $this->salas = new ArrayCollection();
+    }
+
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+	
+	/**
+     * Set provincia_id
+     *
+     * @param integer $provincia_id
+     * @return Provincia
+     */
+    public function setProvinciaId($provincia_id)
+    {
+        $this->provincia_id = $provincia_id;
+    
+        return $this;
+    }
+
+    /**
+     * Get provincia_id
+     *
+     * @return integer 
+     */
+    public function getProvinciaId()
+    {
+        return $this->provincia_id;
+    }
+
+    /**
+     * Set nombre
+     *
+     * @param string $nombre
+     * @return Comuna
+     */
+    public function setNombre($nombre)
+    {
+        $this->nombre = $nombre;
+    
+        return $this;
+    }
+
+    /**
+     * Get nombre
+     *
+     * @return string 
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+
+    /**
+     * Set activo
+     *
+     * @param boolean $activo
+     * @return Comuna
+     */
+    public function setActivo($activo)
+    {
+        $this->activo = $activo;
+    
+        return $this;
+    }
+
+    /**
+     * Get activo
+     *
+     * @return boolean 
+     */
+    public function getActivo()
+    {
+        return $this->activo;
+    }
+
+    /**
+     * Set provincia
+     *
+     * @param \Cadem\AdminBundle\Entity\Provincia $provincia
+     * @return Comuna
+     */
+    public function setProvincia(\Cadem\AdminBundle\Entity\Provincia $provincia = null)
+    {
+        $this->provincia = $provincia;
+    
+        return $this;
+    }
+
+    /**
+     * Get provincia
+     *
+     * @return \Cadem\AdminBundle\Entity\Provincia 
+     */
+    public function getProvincia()
+    {
+        return $this->provincia;
+    }
+
+    /**
+     * Add salas
+     *
+     * @param \Cadem\AdminBundle\Entity\Sala $salas
+     * @return Comuna
+     */
+    public function addSala(\Cadem\AdminBundle\Entity\Sala $salas)
+    {
+        $this->salas[] = $salas;
+    
+        return $this;
+    }
+
+    /**
+     * Remove salas
+     *
+     * @param \Cadem\AdminBundle\Entity\Sala $salas
+     */
+    public function removeSala(\Cadem\AdminBundle\Entity\Sala $salas)
+    {
+        $this->salas->removeElement($salas);
+    }
+
+    /**
+     * Get salas
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSalas()
+    {
+        return $this->salas;
+    }
+	
+	public function __toString()
+	{
+		return $this->nombre;
+	}
+}
