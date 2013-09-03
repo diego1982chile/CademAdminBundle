@@ -29,7 +29,10 @@ security:
                     provider: fos_userbundle
                     csrf_provider: form.csrf_provider
                     success_handler: cadem_admin.authentication.login_success_handler
-                logout:       true
+                logout:       
+                    path: fos_user_security_logout
+                    target: /
+                    invalidate_session: false
                 anonymous:    true                
         # dev:
             # pattern:  ^/(_(profiler|wdt)|css|images|js)/

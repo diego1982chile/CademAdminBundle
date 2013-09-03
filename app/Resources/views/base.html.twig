@@ -2,12 +2,142 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Cadem Analytics{% endblock %}</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
+		<link href="{{ asset('bundles/cademadmin/css/bootstrap.min.css') }}" rel="stylesheet">
+		<link href="{{ asset('bundles/cademadmin/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
+		<link href="{{ asset('bundles/cademadmin/css/redmond/jquery-ui.min.css') }}" rel="stylesheet">				
+		<style type="text/css">
+		  body {
+			padding-top: 60px;
+			//padding-bottom: 40px;
+		  }
+		  .sidebar-nav {
+			padding: 9px 0;
+		  }
+
+		  @media (max-width: 980px) {
+			/* Enable use of floated navbar text */
+			.navbar-text.pull-right {
+			  float: none;
+			  padding-left: 5px;
+			  padding-right: 5px;
+			}
+		  }
+		  
+		  form#filtros select{
+			font-size: 12px;
+		  }
+		  
+		  .progress-label {
+			float: left;
+			margin-left: 40%;
+			margin-top: -2px;
+			font-size: 12px;
+			font-weight: bolder;
+			//text-shadow: 1px 1px 0 #fff;
+		  }
+		  
+		  .alert{
+			font-size: 14px !important;
+			line-height: 20px !important;
+		  }
+
+		  .divider-vertical {
+		  	border-left: 1px solid rgb(219, 219, 219) !important;
+		  }
+		  
+		  {% block customstyles %}{% endblock %}
+		</style>
         {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />				
+		
     </head>
+	
     <body>
-        {% block body %}{% endblock %}
+		<div class="navbar navbar-fixed-top">
+			<div class="navbar-inner">
+				<div class="container-fluid">
+					<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a style="padding:0 20px" class="brand" href="{{ path('dashboard_index')}}"><!-- Cadem Analytics<span style="font-size:11px;line-height:0">beta</span> --><img style="height: 40px;" src="{{ asset('bundles/cademadmin/images/logocadem.png') }}"></a>
+					<div class="nav-collapse collapse">
+						<div style="margin-top: 0" class="btn-group pull-right navbar-text">
+							<a class="btn btn-small" href="{{ path('fos_user_profile_show')}}">{{ app.user.username }}</a>
+							<button class="btn btn-small dropdown-toggle" data-toggle="dropdown">
+								<span class="caret"></span>
+							</button>
+							<ul class="dropdown-menu">
+								<li><a href="{{ path('fos_user_profile_show')}}">Perfil</a></li>
+								<li><a href="{{ path('fos_user_security_logout') }}">{{ 'layout.logout'|trans({}, 'FOSUserBundle') }}</a></li>
+							</ul>
+						</div>
+						<ul id='nav' class="nav">
+							<li class="{% if app.request.attributes.get('_route') == 'dashboard_index' %}active{% endif %}"><a href="{{ path('dashboard_index')}}">Dashboard</a></li>							
+												
+							<li class="dropdown">
+				                <a href="#"  class="dropdown-toggle" data-toggle="dropdown">Auditores <b class="caret"></b></a>
+				                <ul class="dropdown-menu">
+								  <li><a href="{{ path('auditor')}}">Auditor</a></li>
+				                  <li><a href="{{ path('auditorsala')}}">Auditor-Sala</a></li>				                  
+				                </ul>
+			                </li>
+							<li class="dropdown">
+				                <a href="#"  class="dropdown-toggle" data-toggle="dropdown">Estudios <b class="caret"></b></a>
+				                <ul class="dropdown-menu">
+								  <li><a href="{{ path('auditor')}}">Estudio</a></li>
+				                  <li><a href="{{ path('auditorsala')}}">Estudio-Sala</a></li>				                  
+				                </ul>
+			                </li>
+							<li class="dropdown">
+				                <a href="#"  class="dropdown-toggle" data-toggle="dropdown">Productos <b class="caret"></b></a>
+				                <ul class="dropdown-menu">
+								  <li><a href="{{ path('auditor')}}">Producto</a></li>
+				                  <li><a href="{{ path('auditorsala')}}">Producto-Cliente</a></li>				                  
+				                </ul>
+			                </li>
+							<li class="dropdown">
+				                <a href="#"  class="dropdown-toggle" data-toggle="dropdown">Salas <b class="caret"></b></a>
+				                <ul class="dropdown-menu">
+								  <li><a href="{{ path('auditor')}}">Sala</a></li>
+				                  <li><a href="{{ path('auditorsala')}}">Sala-Cliente</a></li>				                  
+				                </ul>
+			                </li>
+			                <li class="divider-vertical"></li>			                
+								  
+						</ul>
+			                </li>			                							
+							
+						</ul>
+					</div><!--/.nav-collapse -->
+				</div>
+			</div>
+		</div>    
+        
+		<div class='well' style='margin-left:2em;margin-right:2em;'>
+			{% block body %}{% endblock %}				
+		</div>		
+		
+      </div><!--/row-->
+
+      <hr style="margin:10px 0">      
+
+    </div><!--/.fluid-container-->				   	
+ 		
+		<script src="{{ asset('bundles/cademadmin/js/jquery-1.9.1.min.js') }}"></script>
+		<script src="{{ asset('bundles/cademadmin/js/jquery-ui.min.js') }}"></script>
+		<script src="{{ asset('bundles/cademadmin/js/bootstrap.min.js') }}"></script>		
+		
         {% block javascripts %}{% endblock %}
+		<script>
+		$(function() {
+											
+			});								
+		</script>
     </body>
 </html>
