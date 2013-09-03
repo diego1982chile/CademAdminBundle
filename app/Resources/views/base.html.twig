@@ -8,7 +8,9 @@
 		<meta name="author" content="">
 		<link href="{{ asset('bundles/cademadmin/css/bootstrap.min.css') }}" rel="stylesheet">
 		<link href="{{ asset('bundles/cademadmin/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
-		<link href="{{ asset('bundles/cademadmin/css/redmond/jquery-ui.min.css') }}" rel="stylesheet">				
+		<link href="{{ asset('bundles/cademadmin/css/smoothness/jquery-ui-1.9.2.custom.min.css') }}" rel="stylesheet">				
+		<link href="{{ asset('bundles/cademadmin/css/dataTables_themeroller.css') }}" rel="stylesheet">
+		<link href="{{ asset('bundles/cademadmin/css/demo_table.css') }}" rel="stylesheet">
 		<style type="text/css">
 		  body {
 			padding-top: 60px;
@@ -48,6 +50,28 @@
 		  .divider-vertical {
 		  	border-left: 1px solid rgb(219, 219, 219) !important;
 		  }
+		  
+			table.table thead .sorting,
+			table.table thead .sorting_asc,
+			table.table thead .sorting_desc,
+			table.table thead .sorting_asc_disabled,
+			table.table thead .sorting_desc_disabled {
+				cursor: pointer;
+				*cursor: hand;
+			}
+ 
+			table.table thead .sorting { background: url('images/sort_both.png') no-repeat center right; }
+			table.table thead .sorting_asc { background: url('images/sort_asc.png') no-repeat center right; }
+			table.table thead .sorting_desc { background: url('images/sort_desc.png') no-repeat center right; }
+			 
+			table.table thead .sorting_asc_disabled { background: url('images/sort_asc_disabled.png') no-repeat center right; }
+			table.table thead .sorting_desc_disabled { background: url('images/sort_desc_disabled.png') no-repeat center right; }
+			
+			
+			
+			.table{
+				margin-bottom: 0px !important;
+			}
 		  
 		  {% block customstyles %}{% endblock %}
 		</style>
@@ -90,22 +114,22 @@
 							<li class="dropdown">
 				                <a href="#"  class="dropdown-toggle" data-toggle="dropdown">Estudios <b class="caret"></b></a>
 				                <ul class="dropdown-menu">
-								  <li><a href="{{ path('auditor')}}">Estudio</a></li>
-				                  <li><a href="{{ path('auditorsala')}}">Estudio-Sala</a></li>				                  
+								  <li><a href="{{ path('estudio')}}">Estudio</a></li>
+				                  <li><a href="{{ path('estudiosala')}}">Estudio-Sala</a></li>				                  
 				                </ul>
 			                </li>
 							<li class="dropdown">
 				                <a href="#"  class="dropdown-toggle" data-toggle="dropdown">Productos <b class="caret"></b></a>
 				                <ul class="dropdown-menu">
-								  <li><a href="{{ path('auditor')}}">Producto</a></li>
-				                  <li><a href="{{ path('auditorsala')}}">Producto-Cliente</a></li>				                  
+								  <li><a href="{{ path('estudio')}}">Producto</a></li>
+				                  <li><a href="{{ path('estudiosala')}}">Producto-Cliente</a></li>				                  
 				                </ul>
 			                </li>
 							<li class="dropdown">
 				                <a href="#"  class="dropdown-toggle" data-toggle="dropdown">Salas <b class="caret"></b></a>
 				                <ul class="dropdown-menu">
-								  <li><a href="{{ path('auditor')}}">Sala</a></li>
-				                  <li><a href="{{ path('auditorsala')}}">Sala-Cliente</a></li>				                  
+								  <li><a href="{{ path('estudio')}}">Sala</a></li>
+				                  <li><a href="{{ path('estudiosala')}}">Sala-Cliente</a></li>				                  
 				                </ul>
 			                </li>
 			                <li class="divider-vertical"></li>			                
@@ -128,16 +152,41 @@
       <hr style="margin:10px 0">      
 
     </div><!--/.fluid-container-->				   	
- 		
+		{% set currentroute = path(app.request.attributes.get('_route'))|split('/')[path(app.request.attributes.get('_route'))|split('/')|length-2] %}	 		
 		<script src="{{ asset('bundles/cademadmin/js/jquery-1.9.1.min.js') }}"></script>
 		<script src="{{ asset('bundles/cademadmin/js/jquery-ui.min.js') }}"></script>
-		<script src="{{ asset('bundles/cademadmin/js/bootstrap.min.js') }}"></script>		
+		<script src="{{ asset('bundles/cademadmin/js/bootstrap.min.js') }}"></script>	
+		<script src="{{ asset('bundles/cademadmin/js/jquery.dataTables.min.js') }}"></script>
+		<script src="{{ asset('bundles/cademadmin/js/jquery-ui-1.9.2.custom.min.js') }}"></script>		
 		
         {% block javascripts %}{% endblock %}
-		<script>
-		$(function() {
-											
-			});								
+		<script>		
+		var oTable;
+		$(document).ready(function () {
+					
+			{% if currentroute in ['auditor','estudio'] %}					
+			
+			oTable = $('table.records_list').dataTable({								
+				"sScrollY": "230px",
+				// "sScrollX": "100%",
+				// "sScrollXInner": maxWidth+'%',
+				"bScrollCollapse": false,
+				"bFilter": true,
+				"bSort": true,
+				"bInfo": false,
+				"bPaginate": false,
+				"bJQueryUI": false,
+				"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>"
+				// "bAutoWidth": true, 							
+			});
+			
+			$.extend( $.fn.dataTableExt.oStdClasses, {
+				"sWrapper": "dataTables_wrapper form-inline"
+			} );
+			
+			{% endif %}
+					
+		});								
 		</script>
     </body>
 </html>
