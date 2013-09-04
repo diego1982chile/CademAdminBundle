@@ -77,6 +77,7 @@ class EstudiosalaController extends Controller
 			$fila=array();
 			$fila['aTargets']=array($cont);		
 			$fila['sTitle']=$estudio['nombre'];
+			$fila['bSortable']=false;
 			// $fila['sWidth']="3%";
 			array_push($aoColumnDefs,$fila);
 			$cont++;					

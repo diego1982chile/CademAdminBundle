@@ -155,7 +155,8 @@
 		<script src="{{ asset('bundles/cademadmin/js/bootstrap.min.js') }}"></script>	
 		<script src="{{ asset('bundles/cademadmin/js/jquery.dataTables.min.js') }}"></script>
 		<script src="{{ asset('bundles/cademadmin/js/jquery-ui-1.9.2.custom.min.js') }}"></script>				
-		<script src="{{ asset('bundles/cademadmin/js/jquery.loader.js') }}"></script>								
+		<script src="{{ asset('bundles/cademadmin/js/jquery.loader.js') }}"></script>					
+		<script src="{{ asset('bundles/cademadmin/js/dataTables.fixedColumns.js') }}"></script>
 		<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
 		<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
         {% block javascripts %}{% endblock %}
@@ -198,21 +199,28 @@
 			});
 			
 			{% elseif currentroute in ['estudiosala'] %}								
+			$('table.records_list').css('max-width','120%');
 			oTable = $('table.records_list').dataTable({								
 				"bProcessing": true,
 				"bServerSide": true,
 				"sAjaxSource": "{{ path('estudiosala_body') }}",
 				"sScrollY": "360px",
-				// "sScrollX": "100%",
-				"sScrollXInner": '150%',
-				"aoColumnDefs": {{aoColumnDefs|raw}},
+				"sScrollX": "100%",
+				"sScrollXInner": '120%',
 				"bScrollCollapse": false,
+				"aoColumnDefs": {{aoColumnDefs|raw}},				
 				"bFilter": true,
 				"bSort": true,
 				"bInfo": false,
 				"bPaginate": false,
 				"bJQueryUI": true,
-				"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>"
+				"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+				"fnInitComplete": function() {		
+					new FixedColumns( oTable, {
+						"sHeightMatch": "none",		
+						"iLeftColumns": 5,
+					});				
+				}
 				// "bAutoWidth": true, 							
 			});
 			
