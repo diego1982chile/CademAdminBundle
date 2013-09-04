@@ -13,7 +13,7 @@ class ControlsBuilderHelper {
 		// $sala=is_null($selected["id_sala"])?0:$selected["id_sala"];
 		// $auditorsala=is_null($selected["id_auditorsala"])?0:$selected["id_auditorsala"];
 		
-		$output='<select id="auditorsala" auditor="'.$selected["id_auditor"].'" sala="'.$selected["id_sala"].'">';
+		$output='<select id="auditorsala" auditor="'.$selected["id_auditor"].'" sala="'.$selected["id_sala"].'" style="width:90%">';
 		
 		foreach($options as $key => $value)
 		{

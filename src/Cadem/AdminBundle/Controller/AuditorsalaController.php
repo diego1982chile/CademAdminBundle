@@ -13,6 +13,7 @@ use Cadem\AdminBundle\Entity\Auditorsala;
 use Cadem\AdminBundle\Form\AuditorsalaType;
 
 use Symfony\Component\HttpFoundation\Session;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Auditorsala controller.
@@ -79,12 +80,12 @@ class AuditorsalaController extends Controller
 									   array('s','calle','s1'),
 									   array('s','numerocalle','s1'),									   									   
 									   array('com','nombre','s4'),
-									   array('auds','salaid','s0'),									   									  
+									   array('s','id','s1'),									   									  
 									);
 		
 		// Se deben recuperar datos de las tablas: auditorsala (s0), sala (s1), cadena (s2), canal (s3), comuna (s4)
 		
-		$columns_=array( 's0_auditorid', 's0_salaid', 's1_foliocadem', 's2_nombre', 's3_nombre','s1_calle', 's1_numerocalle', 's4_nombre' );
+		$columns_=array( 's0_auditorid', 's1_id', 's1_foliocadem', 's2_nombre', 's3_nombre','s1_calle', 's1_numerocalle', 's4_nombre' );
 		$get['columns'] = &$columns;
 	 
 		$em = $this->getDoctrine()->getEntityManager();
@@ -113,12 +114,12 @@ class AuditorsalaController extends Controller
 					$row[] = ($aRow[ $columns_[$i] ]=="0") ? '-' : $aRow[ $columns_[$i] ];
 					break;
 				case "s0_auditorid":
-					$row[] = $this->get('cadem_admin.helper.controls_builder')->buildSelectAuditorsala($session->get("auditores"),array('id_auditor'=>$aRow['s0_auditorid'],'id_sala'=>$aRow['s0_salaid']));										
+					$row[] = $this->get('cadem_admin.helper.controls_builder')->buildSelectAuditorsala($session->get("auditores"),array('id_auditor'=>$aRow['s0_auditorid'],'id_sala'=>$aRow['s1_id']));										
 					break;								
 				case "s1_calle":
 					$row[] = $aRow['s1_calle'].' '.$aRow['s1_numerocalle'];
 					break;
-				case "s0_salaid":					
+				case "s1_id":					
 				case "s1_numerocalle":					
 					break;				
 				default:
@@ -151,13 +152,16 @@ class AuditorsalaController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('auditorsala_show', array('id' => $entity->getId())));
+            // return $this->redirect($this->generateUrl('auditorsala_show', array('id' => $entity->getId())));
+			return new JsonResponse(array("status"=>true,"id"=>$entity->getId()));
         }
+		
+		return new JsonResponse(array("status"=>false,"id"=>''));
 
-        return $this->render('CademAdminBundle:Auditorsala:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+        // return $this->render('CademAdminBundle:Auditorsala:new.html.twig', array(
+            // 'entity' => $entity,
+            // 'form'  => $form->createView(),
+        // ));
     }
 
     /**
@@ -234,7 +238,7 @@ class AuditorsalaController extends Controller
             throw $this->createNotFoundException('Unable to find Auditorsala entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        // $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createForm(new AuditorsalaType(), $entity);
         $editForm->bind($request);
 
@@ -242,14 +246,15 @@ class AuditorsalaController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('auditorsala_edit', array('id' => $id)));
+            // return $this->redirect($this->generateUrl('auditorsala_edit', array('id' => $id)));
+			return new JsonResponse(array("status"=>true,"id"=>$entity->getId()));
         }
-
-        return $this->render('CademAdminBundle:Auditorsala:edit.html.twig', array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
-        ));
+		return new JsonResponse(array("status"=>false,"id"=>''));
+        // return $this->render('CademAdminBundle:Auditorsala:edit.html.twig', array(
+            // 'entity'      => $entity,
+            // 'edit_form'   => $editForm->createView(),
+            // 'delete_form' => $deleteForm->createView(),
+        // ));
     }
 
     /**

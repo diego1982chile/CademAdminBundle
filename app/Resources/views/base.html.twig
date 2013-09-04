@@ -162,8 +162,9 @@
 		<script src="{{ asset('bundles/cademadmin/js/jquery-ui.min.js') }}"></script>
 		<script src="{{ asset('bundles/cademadmin/js/bootstrap.min.js') }}"></script>	
 		<script src="{{ asset('bundles/cademadmin/js/jquery.dataTables.min.js') }}"></script>
-		<script src="{{ asset('bundles/cademadmin/js/jquery-ui-1.9.2.custom.min.js') }}"></script>		
-		{{currentroute}}
+		<script src="{{ asset('bundles/cademadmin/js/jquery-ui-1.9.2.custom.min.js') }}"></script>				
+		<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+		<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
         {% block javascripts %}{% endblock %}
 		<script>		
 		var oTable;
@@ -185,8 +186,7 @@
 				// "bAutoWidth": true, 							
 			});
 									
-			{% elseif currentroute in ['auditorsala'] %}					
-			alert('entre');
+			{% elseif currentroute in ['auditorsala'] %}								
 			oTable = $('table.records_list').dataTable({								
 				"bProcessing": true,
 				"bServerSide": true,

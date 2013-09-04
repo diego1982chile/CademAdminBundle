@@ -2,7 +2,14 @@
 
 {% block body -%}
     <h1>Auditorsala list</h1>
-
+	<div style='display:none'>
+	<form id='auditorsala' action="{{ path('auditorsala_create') }}" method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <p>
+            <button type="submit">Create</button>
+        </p>
+    </form>
+	</div>
     <table cellpadding="0" cellspacing="0" border="0" class="records_list table table-striped table-bordered" width='100%'>
         <thead>
             <tr>
@@ -17,7 +24,6 @@
         <tbody>        
         </tbody>
     </table>
-
         <ul>
         <li>
             <a href="{{ path('auditorsala_new') }}">
@@ -26,3 +32,62 @@
         </li>
     </ul>
     {% endblock %}
+	{% block javascripts %}
+	<script>
+	$(document).ready(function () {
+	
+		var node;
+	
+		$(document).on("change", "select#auditorsala", function(event){
+			
+			$(this).parent().append("<img class='loader' alt='' style='float:right;margin-left:0px' src='{{ asset('bundles/cademadmin/images/loader-minitrans.gif') }}'  >");	
+			node=$(event.target);
+			
+			// Actualizar el form
+			$("#cadem_adminbundle_auditorsalatype_auditor").val($(this).val());
+			$("#cadem_adminbundle_auditorsalatype_sala").val($(this).attr('sala'));
+			$("#cadem_adminbundle_auditorsalatype_activo").prop('checked',true);
+			
+			// Obtener el auditor anterior
+			var auditoranterior=$(this).attr('auditor');			
+			// Obtener el auditor nuevo
+			var auditornuevo=$(this).val();			
+			
+			// Actualizar el action del form
+			if(auditoranterior=='' && auditornuevo!=0)
+				$('form#auditorsala').attr('action',Routing.generate('auditorsala_create'));				
+			if(auditoranterior!='' && auditornuevo!=0)
+				$('form#auditorsala').attr('action',Routing.generate('auditorsala_update', { id: auditoranterior }));
+			if(auditoranterior!='' && auditornuevo==0)
+				$('form#auditorsala').attr('action',Routing.generate('auditorsala_delete', { id: auditoranterior }));			
+			
+			// Ejecutar submit
+			$('form#auditorsala').submit();			
+		});
+		
+		$('form#auditorsala').submit(function(){
+			
+			var dataform = $(this).serializeArray();		
+		
+			$.post($(this).attr('action'),dataform,function(data){										
+			
+				$('.loader').remove();
+			
+				if(data.status)
+				{
+					alert("Cambios realizados existosamente");
+					$(node).attr('auditor',data.id);
+				}
+				else
+				{
+					alert("Cambios realizados existosamente");
+				}
+			
+			});
+			return false;
+		});
+	
+	});
+	</script>
+	{% endblock %}
+	

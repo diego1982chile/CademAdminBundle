@@ -14,6 +14,8 @@ auditorsala_create:
     pattern:  /create
     defaults: { _controller: "CademAdminBundle:Auditorsala:create" }
     requirements: { _method: post }
+    options:
+        expose: true
 
 auditorsala_edit:
     pattern:  /{id}/edit
@@ -23,11 +25,15 @@ auditorsala_update:
     pattern:  /{id}/update
     defaults: { _controller: "CademAdminBundle:Auditorsala:update" }
     requirements: { _method: post|put }
+    options:
+        expose: true	
 
 auditorsala_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "CademAdminBundle:Auditorsala:delete" }
     requirements: { _method: post|delete }
+    options:
+        expose: true	
 
 auditorsala_body:
     pattern:  /body
