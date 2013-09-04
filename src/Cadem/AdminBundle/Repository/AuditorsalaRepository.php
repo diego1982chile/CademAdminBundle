@@ -43,7 +43,7 @@ class AuditorsalaRepository extends EntityRepository
       ->createQueryBuilder($alias)      
 	  ->select(str_replace(" , ", " ", implode(", ", $aColumns)))	  
 	  ->leftJoin('s.auditorsala','auds')
-	  ->leftjoin('auds.auditor','a')
+	  // ->leftjoin('auds.auditor','a')
 	  ->leftjoin('s.cadena','cad')
 	  ->leftjoin('s.canal','can')
 	  ->leftjoin('s.comuna','com');

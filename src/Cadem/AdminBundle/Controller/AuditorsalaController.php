@@ -3,6 +3,7 @@
 namespace Cadem\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -11,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Cadem\AdminBundle\Entity\Auditorsala;
 use Cadem\AdminBundle\Form\AuditorsalaType;
 
+use Symfony\Component\HttpFoundation\Session;
 
 /**
  * Auditorsala controller.
@@ -24,14 +26,30 @@ class AuditorsalaController extends Controller
      */
     public function indexAction()
     {
-        // $em = $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
         // $entities = $em->getRepository('CademAdminBundle:Auditorsala')->findAll();
 		
+		$session = $this->get("session");
+		
 		$entity = new Auditorsala();
         $form   = $this->createForm(new AuditorsalaType(), $entity);
+		
+		//auditores
+		$query = $em->createQuery(
+			'SELECT a FROM CademAdminBundle:Auditor a');
+			
+		$auditores = $query->getResult();				
+		
+		$choices_auditores = array('0' => '');
+		foreach($auditores as $a)
+		{
+			$choices_auditores[$a->getId()] = strtoupper($a->getNombre());
+		}
+		
+		$session->set("auditores",$choices_auditores);			
 
-        return $this->render('CademAdminBundle:Auditorsala:new.html.twig', array(
+        return $this->render('CademAdminBundle:Auditorsala:index.html.twig', array(
             'entity' => $entity,
             'form'   => $form->createView(),
         ));
@@ -45,43 +63,68 @@ class AuditorsalaController extends Controller
 	   * @Route("/body", name="body")
 	   * @Template()
 	   */
-	  public function body(Request $request)
+	  public function bodyAction(Request $request)
 	  {
 		$get = $request->query->all();
+		$session=$this->get("session");			
 	 
 		/* Array of database columns which should be read and sent back to DataTables. Use a space where
 		* you want to insert a non-database field (for example a counter or static image)
 		*/
-		$columns = array( 'id', 'twitter_username', 'twitterID', 'firstname' );
+		// Se envían tripletas (alias,campo,alias_tabla)
+		$columns = array( array('auds','auditorid','s0'),									   
+									   array('s','foliocadem','s1'),
+									   array('cad','nombre','s2'),
+									   array('can','nombre','s3'),
+									   array('s','calle','s1'),
+									   array('s','numerocalle','s1'),									   									   
+									   array('com','nombre','s4'),
+									   array('auds','salaid','s0'),									   									  
+									);
+		
+		// Se deben recuperar datos de las tablas: auditorsala (s0), sala (s1), cadena (s2), canal (s3), comuna (s4)
+		
+		$columns_=array( 's0_auditorid', 's0_salaid', 's1_foliocadem', 's2_nombre', 's3_nombre','s1_calle', 's1_numerocalle', 's4_nombre' );
 		$get['columns'] = &$columns;
 	 
 		$em = $this->getDoctrine()->getEntityManager();
-		$rResult = $em->getRepository('UserBundle:User')->ajaxTable($get, true)->getArrayResult();
+		$rResult = $em->getRepository('CademAdminBundle:Auditorsala')->ajaxTable($get, true)->getArrayResult();
 	 
 		/* Data set length after filtering */
-		$iFilteredTotal = count($rResult);
+		$iFilteredTotal = count($rResult);			
 	 
 		/*
 		 * Output
 		 */
 		$output = array(
 		  "sEcho" => intval($get['sEcho']),
-		  "iTotalRecords" => $em->getRepository('UserBundle:User')->getCount(),
+		  "iTotalRecords" => $em->getRepository('CademAdminBundle:Auditorsala')->getCount(),
 		  "iTotalDisplayRecords" => $iFilteredTotal,
 		  "aaData" => array()
 		);
 	 
 		foreach($rResult as $aRow)
 		{
-		  $row = array();
-		  for ( $i=0 ; $i<count($columns) ; $i++ ){
-			if ( $columns[$i] == "version" ){
-			  /* Special output formatting for 'version' column */
-			  $row[] = ($aRow[ $columns[$i] ]=="0") ? '-' : $aRow[ $columns[$i] ];
-			}elseif ( $columns[$i] != ' ' ){
-			  /* General output */
-			  $row[] = $aRow[ $columns[$i] ];
-			}
+		  $row = array();		  
+		  for ( $i=0 ; $i<count($columns_) ; $i++ ){		  
+			switch($columns_[$i])
+			{
+				case "version":
+					$row[] = ($aRow[ $columns_[$i] ]=="0") ? '-' : $aRow[ $columns_[$i] ];
+					break;
+				case "s0_auditorid":
+					$row[] = $this->get('cadem_admin.helper.controls_builder')->buildSelectAuditorsala($session->get("auditores"),array('id_auditor'=>$aRow['s0_auditorid'],'id_sala'=>$aRow['s0_salaid']));										
+					break;								
+				case "s1_calle":
+					$row[] = $aRow['s1_calle'].' '.$aRow['s1_numerocalle'];
+					break;
+				case "s0_salaid":					
+				case "s1_numerocalle":					
+					break;				
+				default:
+					 $row[] = $aRow[ $columns_[$i] ];
+					 break;
+			}			
 		  }
 		  $output['aaData'][] = $row;
 		}

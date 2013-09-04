@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Auditorsala
  *
  * @ORM\Table(name="SALAAUDITOR")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Cadem\AdminBundle\Repository\AuditorsalaRepository")
  */
 class Auditorsala
 {

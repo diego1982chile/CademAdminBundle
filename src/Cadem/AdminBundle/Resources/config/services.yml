@@ -12,3 +12,6 @@ services:
     cadem_admin.authentication.logout_handler:
         class: Cadem\AdminBundle\EventListener\LogoutHandler
         arguments:  []
+    cadem_admin.helper.controls_builder:
+        class: Cadem\AdminBundle\Helper\ControlsBuilderHelper
+        arguments:  []		

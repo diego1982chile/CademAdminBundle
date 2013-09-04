@@ -28,3 +28,8 @@ auditorsala_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "CademAdminBundle:Auditorsala:delete" }
     requirements: { _method: post|delete }
+
+auditorsala_body:
+    pattern:  /body
+    defaults: { _controller: "CademAdminBundle:Auditorsala:body" }
+    requirements: { _method: get }

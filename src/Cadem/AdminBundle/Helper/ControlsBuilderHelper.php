@@ -7,13 +7,13 @@ class ControlsBuilderHelper {
 	
     }	
 	
-	public function buildSelectAuditorSala($options,$selected) {
+	public function buildSelectAuditorsala($options,$selected) {
 	
 		// $auditor=is_null($selected["id_auditor"])?0:$selected["id_auditor"];
 		// $sala=is_null($selected["id_sala"])?0:$selected["id_sala"];
 		// $auditorsala=is_null($selected["id_auditorsala"])?0:$selected["id_auditorsala"];
 		
-		$output='<select id="auditorsala" auditor="'.$selected["id_auditor"].'" sala="'.$selected["id_sala"].'" auditorsala="'.$selected["id_auditorsala"].'">';
+		$output='<select id="auditorsala" auditor="'.$selected["id_auditor"].'" sala="'.$selected["id_sala"].'">';
 		
 		foreach($options as $key => $value)
 		{
@@ -28,7 +28,7 @@ class ControlsBuilderHelper {
 		return $output;
 	}		
 	
-	public function buildInputAuditorSala($options,$selected) {
+	public function buildInputAuditorsala($options,$selected) {
 		
 		$output='';
 		
