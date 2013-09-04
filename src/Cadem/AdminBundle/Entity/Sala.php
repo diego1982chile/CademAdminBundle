@@ -129,6 +129,12 @@ class Sala
      */
 	 
 	protected $auditorsala;
+	
+	/**
+     * @ORM\OneToMany(targetEntity="Estudiosala", mappedBy="sala")
+     */
+	 
+	protected $estudiosala;	
 
 
 	public function __construct()

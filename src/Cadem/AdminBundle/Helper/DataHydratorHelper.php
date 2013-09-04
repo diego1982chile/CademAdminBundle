@@ -7,7 +7,7 @@ class DataHydratorHelper {
 	
     }	
 	
-	public function hydrateEstudioSala($dataSet,$columnas) {
+	public function hydrateEstudiosala($dataSet,$columnas) {
 			
 		$output=array();				
 		$num_regs=count($dataSet);		
@@ -24,14 +24,14 @@ class DataHydratorHelper {
 			
 			while($cont_regs<$num_regs)
 			{	
-				$columna_quiebre=array_search($dataSet[$cont_regs]['s1_id'],$columnas);					
+				$columna_quiebre=array_search($dataSet[$cont_regs]['s1_id'],$columnas);													
 		
 				if($nivel1==$dataSet[$cont_regs]['s0_id'])
 				{ // Mientras no cambie el 1er nivel asignamos los valores de quiebre a las columnas correspondientes	
-					$fila[0]=$dataSet[$cont_regs]['s0_foliocadem'];												
-					$fila[1]=$dataSet[$cont_regs]['s0_calle'].' '.$dataSet[$cont_regs]['s0_numerocalle'];												;																	
-					$fila[2]=$dataSet[$cont_regs]['s2_nombre'];												
-					$fila[3]=$dataSet[$cont_regs]['s3_nombre'];												
+					$fila[0]=$dataSet[$cont_regs]['s0_foliocadem'];																	
+					$fila[1]=$dataSet[$cont_regs]['s2_nombre'];												
+					$fila[2]=$dataSet[$cont_regs]['s3_nombre'];												
+					$fila[3]=$dataSet[$cont_regs]['s0_calle'].' '.$dataSet[$cont_regs]['s0_numerocalle'];												;																	
 					$fila[4]=$dataSet[$cont_regs]['s4_nombre'];							
 					if(!is_null($dataSet[$cont_regs]['s1_id']))
 						$fila[$columna_quiebre+5]="<input type='checkbox' checked />";											

@@ -3,10 +3,17 @@
 namespace Cadem\AdminBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Cadem\AdminBundle\Entity\Estudiosala;
 use Cadem\AdminBundle\Form\EstudiosalaType;
+
+use Symfony\Component\HttpFoundation\Session;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Estudiosala controller.
@@ -22,12 +29,135 @@ class EstudiosalaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('CademAdminBundle:Estudiosala')->findAll();
+        $entities = $em->getRepository('CademAdminBundle:Estudiosala')->findAll();        
+		
+		$query = $em->createQuery(
+			'SELECT e FROM CademAdminBundle:Estudio e');
+			
+		$estudios_ = $query->getResult();			
+		
+		// Obtener los estudios
+		$head=array();		
+		$estudios_aux=array();		
+		
+		// Generamos el head de la tabla, y los estudios
+		foreach($estudios_ as $estudio)
+		{
+			if(!in_array($estudio->getNombre(),$head))
+			{
+				array_push($head,$estudio->getNombre());				
+				$fila['id']=$estudio->getId();
+				$fila['nombre']=$estudio->getNombre();
+				array_push($estudios_aux,$fila);
+			}		
+		}							
+		// Ordenamos la estructura usando comparador personalizado
+		usort($estudios_aux, array($this,"sortFunction"));		
+		
+		// CONSTRUIR EL ENCABEZADO DE LA TABLA
+		$aoColumnDefs=array();
+		$prefixes=array('Folio','Cadena','Canal','Dirección','Comuna');				
+		$cont=0;
+		
+		foreach($prefixes as $prefix)
+		{						
+			$fila=array();
+			$fila['aTargets']=array($cont);		
+			$fila['sTitle']=$prefix;
+			// $fila['sWidth']="3%";
+			array_push($aoColumnDefs,$fila);
+			$cont++;					
+		}
+				
+		$estudios=array();		
+		
+		foreach($estudios_aux as $estudio)
+		{			
+			array_push($estudios,$estudio['id']);				
+			$fila=array();
+			$fila['aTargets']=array($cont);		
+			$fila['sTitle']=$estudio['nombre'];
+			// $fila['sWidth']="3%";
+			array_push($aoColumnDefs,$fila);
+			$cont++;					
+		}					
+				
+        // $entities = $em->getRepository('CademAdminBundle:Auditorsala')->findAll();
+		
+		$session = $this->get("session");
+		$session->set("estudios",$estudios);				
+		
+		unset($estudios_aux);
+		unset($head);
+		
+		$entity = new Estudiosala();
+        $form   = $this->createForm(new EstudiosalaType(), $entity);			
 
         return $this->render('CademAdminBundle:Estudiosala:index.html.twig', array(
-            'entities' => $entities,
+            // 'entity' => $entity,
+            'form'   => $form->createView(),
+			'aoColumnDefs' => json_encode($aoColumnDefs),	
         ));
     }
+	
+	// Definimos un comparador de cadenas para ordenar los estudios
+	function sortFunction( $a, $b ) {		
+		return $a['nombre'] > $b['nombre'];
+	}		
+	
+	  /**
+	   * @Route("/body", name="body")
+	   * @Template()
+	  */
+	  public function bodyAction(Request $request)
+	  {
+		$get = $request->query->all();
+		$session=$this->get("session");			
+	 
+		/* Array of database columns which should be read and sent back to DataTables. Use a space where
+		* you want to insert a non-database field (for example a counter or static image)
+		*/
+		// Se envían tripletas (alias,campo,alias_tabla)
+		$columns = array( array('s','foliocadem','s0'),
+									   array('cad','nombre','s2'),
+									   array('can','nombre','s3'),
+									   array('s','calle','s0'),
+									   array('s','numerocalle','s0'),									   									   
+									   array('com','nombre','s4'),
+									   array('s','id','s0'),									   									  
+									   array('ests','id','s1'),			
+									   // array('auds','auditorid','s0'),									
+									);
+		
+		// Se deben recuperar datos de las tablas: auditorsala (s0), sala (s1), cadena (s2), canal (s3), comuna (s4)
+		
+		$columns_=array(  's1_id', 's0_foliocadem', 's1_nombre', 's2_nombre','s0_calle', 's0_numerocalle', 's3_nombre' );
+		$get['columns'] = &$columns;
+	 
+		$em = $this->getDoctrine()->getEntityManager();
+		$rResult = $em->getRepository('CademAdminBundle:Estudiosala')->ajaxTable($get, true)->getArrayResult();
+	 
+		/* Data set length after filtering */
+		$iFilteredTotal = count($rResult);			
+	 
+		/*
+		 * Output
+		 */
+		$output = array(
+		  "sEcho" => intval($get['sEcho']),
+		  "iTotalRecords" => $em->getRepository('CademAdminBundle:Estudiosala')->getCount(),
+		  "iTotalDisplayRecords" => $iFilteredTotal,
+		  "aaData" => array()
+		);
+	 		
+		$output['aaData'] = $this->get('cadem_admin.helper.data_hydrator')->hydrateEstudiosala($rResult,$session->get("estudios"));										
+	 
+		unset($rResult);
+	 
+		return new Response(
+		  json_encode($output)
+		);
+	  }
 
     /**
      * Creates a new Estudiosala entity.

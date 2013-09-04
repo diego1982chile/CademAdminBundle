@@ -15,3 +15,6 @@ services:
     cadem_admin.helper.controls_builder:
         class: Cadem\AdminBundle\Helper\ControlsBuilderHelper
         arguments:  []		
+    cadem_admin.helper.data_hydrator:
+        class: Cadem\AdminBundle\Helper\DataHydratorHelper
+        arguments:  []				

@@ -55,7 +55,7 @@ class EstudiosalaRepository extends EntityRepository
  
     if ( isset( $get['iDisplayStart'] ) && $get['iDisplayLength'] != '-1' ){
       $cb->setFirstResult( (int)$get['iDisplayStart'] )
-         ->setMaxResults( (int)$get['iDisplayLength'] );
+			->setMaxResults( (int)$get['iDisplayLength'] );
     }	
  
     /*

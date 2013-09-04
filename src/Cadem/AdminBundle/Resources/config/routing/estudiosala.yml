@@ -28,3 +28,8 @@ estudiosala_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "CademAdminBundle:Estudiosala:delete" }
     requirements: { _method: post|delete }
+
+estudiosala_body:
+    pattern:  /body
+    defaults: { _controller: "CademAdminBundle:Estudiosala:body" }
+    requirements: { _method: get }

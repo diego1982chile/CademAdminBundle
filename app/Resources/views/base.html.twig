@@ -65,6 +65,10 @@
 			table tr td{
 				vertical-align: middle !important;
 			}	
+			
+			h1{
+				
+			}
 		  
 		  {% block customstyles %}{% endblock %}
 		</style>
@@ -183,6 +187,25 @@
 				"sScrollY": "360px",
 				// "sScrollX": "100%",
 				// "sScrollXInner": maxWidth+'%',
+				"bScrollCollapse": false,
+				"bFilter": true,
+				"bSort": true,
+				"bInfo": false,
+				"bPaginate": false,
+				"bJQueryUI": true,
+				"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>"
+				// "bAutoWidth": true, 							
+			});
+			
+			{% elseif currentroute in ['estudiosala'] %}								
+			oTable = $('table.records_list').dataTable({								
+				"bProcessing": true,
+				"bServerSide": true,
+				"sAjaxSource": "{{ path('estudiosala_body') }}",
+				"sScrollY": "360px",
+				// "sScrollX": "100%",
+				"sScrollXInner": '150%',
+				"aoColumnDefs": {{aoColumnDefs|raw}},
 				"bScrollCollapse": false,
 				"bFilter": true,
 				"bSort": true,
