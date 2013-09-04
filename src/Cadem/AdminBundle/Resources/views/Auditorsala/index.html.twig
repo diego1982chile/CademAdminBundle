@@ -40,7 +40,11 @@
 	
 		$(document).on("change", "select#auditorsala", function(event){
 			
-			$(this).parent().append("<img class='loader' alt='' style='float:right;margin-left:0px' src='{{ asset('bundles/cademadmin/images/loader-minitrans.gif') }}'  >");	
+			// $(this).parent().append("<img class='loader' alt='' style='float:right;margin-left:0px' src='{{ asset('bundles/cademadmin/images/loader-minitrans.gif') }}'  >");	
+			$.loader({
+				className:"blue-with-image-2",
+				content:''
+			});
 			node=$(event.target);
 			
 			// Actualizar el form
@@ -49,7 +53,7 @@
 			$("#cadem_adminbundle_auditorsalatype_activo").prop('checked',true);
 			
 			// Obtener el auditor anterior
-			var auditoranterior=$(this).attr('auditor');			
+			var auditoranterior=$(this).attr('auditorsala');			
 			// Obtener el auditor nuevo
 			var auditornuevo=$(this).val();			
 			
@@ -65,18 +69,18 @@
 			$('form#auditorsala').submit();			
 		});
 		
-		$('form#auditorsala').submit(function(){
-			
+		$('form#auditorsala').submit(function(){			
 			var dataform = $(this).serializeArray();		
 		
 			$.post($(this).attr('action'),dataform,function(data){										
 			
-				$('.loader').remove();
-			
+				// $('.loader').remove();
+				$.loader('close');				
+				
 				if(data.status)
 				{
 					alert("Cambios realizados existosamente");
-					$(node).attr('auditor',data.id);
+					$(node).attr('auditorsala',data.id);
 				}
 				else
 				{

@@ -12,6 +12,7 @@
 		<!--link href="{{ asset('bundles/cademadmin/css/jquery.dataTables_themeroller.css') }}" rel="stylesheet"-->
 		<link href="{{ asset('bundles/cademadmin/css/jquery.dataTables.css') }}" rel="stylesheet">
 		<link href="{{ asset('bundles/cademadmin/css/demo_table.css') }}" rel="stylesheet">
+		<link href="{{ asset('bundles/cademadmin/css/jquery.loader.css') }}" rel="stylesheet" />
 		
 		<style type="text/css">
 		  body {
@@ -51,24 +52,7 @@
 
 		  .divider-vertical {
 		  	border-left: 1px solid rgb(219, 219, 219) !important;
-		  }
-		  
-			table.table thead .sorting,
-			table.table thead .sorting_asc,
-			table.table thead .sorting_desc,
-			table.table thead .sorting_asc_disabled,
-			table.table thead .sorting_desc_disabled {
-				cursor: pointer;
-				*cursor: hand;
-			}
- 
-			table.table thead .sorting { background: url('images/sort_both.png') no-repeat center right; }
-			table.table thead .sorting_asc { background: url('images/sort_asc.png') no-repeat center right; }
-			table.table thead .sorting_desc { background: url('images/sort_desc.png') no-repeat center right; }
-			 
-			table.table thead .sorting_asc_disabled { background: url('images/sort_asc_disabled.png') no-repeat center right; }
-			table.table thead .sorting_desc_disabled { background: url('images/sort_desc_disabled.png') no-repeat center right; }
-			
+		  }		  
 			.ui-icon{
 				display: inline-table !important;
 				float: right !important;
@@ -77,6 +61,10 @@
 			.table{
 				margin-bottom: 0px !important;
 			}
+			
+			table tr td{
+				vertical-align: middle !important;
+			}	
 		  
 		  {% block customstyles %}{% endblock %}
 		</style>
@@ -163,6 +151,7 @@
 		<script src="{{ asset('bundles/cademadmin/js/bootstrap.min.js') }}"></script>	
 		<script src="{{ asset('bundles/cademadmin/js/jquery.dataTables.min.js') }}"></script>
 		<script src="{{ asset('bundles/cademadmin/js/jquery-ui-1.9.2.custom.min.js') }}"></script>				
+		<script src="{{ asset('bundles/cademadmin/js/jquery.loader.js') }}"></script>								
 		<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
 		<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
         {% block javascripts %}{% endblock %}

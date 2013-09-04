@@ -81,11 +81,12 @@ class AuditorsalaController extends Controller
 									   array('s','numerocalle','s1'),									   									   
 									   array('com','nombre','s4'),
 									   array('s','id','s1'),									   									  
+									   array('auds','id','s0'),									   									  
 									);
 		
 		// Se deben recuperar datos de las tablas: auditorsala (s0), sala (s1), cadena (s2), canal (s3), comuna (s4)
 		
-		$columns_=array( 's0_auditorid', 's1_id', 's1_foliocadem', 's2_nombre', 's3_nombre','s1_calle', 's1_numerocalle', 's4_nombre' );
+		$columns_=array( 's0_auditorid', 's0_id', 's1_id', 's1_foliocadem', 's2_nombre', 's3_nombre','s1_calle', 's1_numerocalle', 's4_nombre' );
 		$get['columns'] = &$columns;
 	 
 		$em = $this->getDoctrine()->getEntityManager();
@@ -106,6 +107,7 @@ class AuditorsalaController extends Controller
 	 
 		foreach($rResult as $aRow)
 		{
+		// die(print_r($aRow));
 		  $row = array();		  
 		  for ( $i=0 ; $i<count($columns_) ; $i++ ){		  
 			switch($columns_[$i])
@@ -114,11 +116,12 @@ class AuditorsalaController extends Controller
 					$row[] = ($aRow[ $columns_[$i] ]=="0") ? '-' : $aRow[ $columns_[$i] ];
 					break;
 				case "s0_auditorid":
-					$row[] = $this->get('cadem_admin.helper.controls_builder')->buildSelectAuditorsala($session->get("auditores"),array('id_auditor'=>$aRow['s0_auditorid'],'id_sala'=>$aRow['s1_id']));										
+					$row[] = $this->get('cadem_admin.helper.controls_builder')->buildSelectAuditorsala($session->get("auditores"),array('id_auditor'=>$aRow['s0_auditorid'],'id_sala'=>$aRow['s1_id'],'id_auditorsala'=>$aRow['s0_id']));										
 					break;								
 				case "s1_calle":
 					$row[] = $aRow['s1_calle'].' '.$aRow['s1_numerocalle'];
 					break;
+				case "s0_id":						
 				case "s1_id":					
 				case "s1_numerocalle":					
 					break;				
@@ -266,19 +269,20 @@ class AuditorsalaController extends Controller
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
-        if ($form->isValid()) {
+        // if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('CademAdminBundle:Auditorsala')->find($id);
 
             if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Auditorsala entity.');
-            }
-
+            }						
             $em->remove($entity);
             $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('auditorsala'));
+			
+			return new JsonResponse(array("status"=>true,"id"=>''));
+        // }
+		// return new JsonResponse(array("status"=>false,"id"=>''));
+        // return $this->redirect($this->generateUrl('auditorsala'));
     }
 
     /**
