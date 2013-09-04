@@ -4,7 +4,7 @@ estudio:
 
 estudio_show:
     pattern:  /{id}/show
-    defaults: { _controller: "CademAdminBundle:Estudio:show" }
+    defaults: { _controller: "CademAdminBundle:Estudio:show", id: default_id }
 
 estudio_new:
     pattern:  /new
@@ -17,7 +17,7 @@ estudio_create:
 
 estudio_edit:
     pattern:  /{id}/edit
-    defaults: { _controller: "CademAdminBundle:Estudio:edit" }
+    defaults: { _controller: "CademAdminBundle:Estudio:edit" , id: default_id}
 
 estudio_update:
     pattern:  /{id}/update

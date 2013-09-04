@@ -4,7 +4,7 @@ estudiosala:
 
 estudiosala_show:
     pattern:  /{id}/show
-    defaults: { _controller: "CademAdminBundle:Estudiosala:show" }
+    defaults: { _controller: "CademAdminBundle:Estudiosala:show", id: default_id }
 
 estudiosala_new:
     pattern:  /new
@@ -17,7 +17,7 @@ estudiosala_create:
 
 estudiosala_edit:
     pattern:  /{id}/edit
-    defaults: { _controller: "CademAdminBundle:Estudiosala:edit" }
+    defaults: { _controller: "CademAdminBundle:Estudiosala:edit", id: default_id }
 
 estudiosala_update:
     pattern:  /{id}/update

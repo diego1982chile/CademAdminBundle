@@ -9,8 +9,10 @@
 		<link href="{{ asset('bundles/cademadmin/css/bootstrap.min.css') }}" rel="stylesheet">
 		<link href="{{ asset('bundles/cademadmin/css/bootstrap-responsive.min.css') }}" rel="stylesheet">
 		<link href="{{ asset('bundles/cademadmin/css/smoothness/jquery-ui-1.9.2.custom.min.css') }}" rel="stylesheet">				
-		<link href="{{ asset('bundles/cademadmin/css/dataTables_themeroller.css') }}" rel="stylesheet">
+		<!--link href="{{ asset('bundles/cademadmin/css/jquery.dataTables_themeroller.css') }}" rel="stylesheet"-->
+		<link href="{{ asset('bundles/cademadmin/css/jquery.dataTables.css') }}" rel="stylesheet">
 		<link href="{{ asset('bundles/cademadmin/css/demo_table.css') }}" rel="stylesheet">
+		
 		<style type="text/css">
 		  body {
 			padding-top: 60px;
@@ -67,7 +69,10 @@
 			table.table thead .sorting_asc_disabled { background: url('images/sort_asc_disabled.png') no-repeat center right; }
 			table.table thead .sorting_desc_disabled { background: url('images/sort_desc_disabled.png') no-repeat center right; }
 			
-			
+			.ui-icon{
+				display: inline-table !important;
+				float: right !important;
+			}
 			
 			.table{
 				margin-bottom: 0px !important;
@@ -167,7 +172,7 @@
 			{% if currentroute in ['auditor','estudio'] %}					
 			
 			oTable = $('table.records_list').dataTable({								
-				"sScrollY": "230px",
+				"sScrollY": "360px",
 				// "sScrollX": "100%",
 				// "sScrollXInner": maxWidth+'%',
 				"bScrollCollapse": false,
@@ -175,7 +180,7 @@
 				"bSort": true,
 				"bInfo": false,
 				"bPaginate": false,
-				"bJQueryUI": false,
+				"bJQueryUI": true,
 				"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>"
 				// "bAutoWidth": true, 							
 			});
@@ -183,6 +188,9 @@
 			$.extend( $.fn.dataTableExt.oStdClasses, {
 				"sWrapper": "dataTables_wrapper form-inline"
 			} );
+			
+			{% elseif currentroute in ['auditorsala'] %}					
+			
 			
 			{% endif %}
 					

@@ -4,7 +4,7 @@ auditor:
 
 auditor_show:
     pattern:  /{id}/show
-    defaults: { _controller: "CademAdminBundle:Auditor:show" }
+    defaults: { _controller: "CademAdminBundle:Auditor:show" , id: default_id}
 
 auditor_new:
     pattern:  /new
@@ -17,7 +17,7 @@ auditor_create:
 
 auditor_edit:
     pattern:  /{id}/edit
-    defaults: { _controller: "CademAdminBundle:Auditor:edit" }
+    defaults: { _controller: "CademAdminBundle:Auditor:edit" , id: default_id}
 
 auditor_update:
     pattern:  /{id}/update

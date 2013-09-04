@@ -5,8 +5,12 @@ namespace Cadem\AdminBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
 use Cadem\AdminBundle\Entity\Auditorsala;
 use Cadem\AdminBundle\Form\AuditorsalaType;
+
 
 /**
  * Auditorsala controller.
@@ -20,14 +24,74 @@ class AuditorsalaController extends Controller
      */
     public function indexAction()
     {
-        $em = $this->getDoctrine()->getManager();
+        // $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('CademAdminBundle:Auditorsala')->findAll();
+        // $entities = $em->getRepository('CademAdminBundle:Auditorsala')->findAll();
+		
+		$entity = new Auditorsala();
+        $form   = $this->createForm(new AuditorsalaType(), $entity);
 
-        return $this->render('CademAdminBundle:Auditorsala:index.html.twig', array(
-            'entities' => $entities,
+        return $this->render('CademAdminBundle:Auditorsala:new.html.twig', array(
+            'entity' => $entity,
+            'form'   => $form->createView(),
         ));
+
+        // return $this->render('CademAdminBundle:Auditorsala:index.html.twig', array(
+            // 'entities' => $entities,
+        // ));
     }
+			 
+	  /**
+	   * @Route("/body", name="body")
+	   * @Template()
+	   */
+	  public function body(Request $request)
+	  {
+		$get = $request->query->all();
+	 
+		/* Array of database columns which should be read and sent back to DataTables. Use a space where
+		* you want to insert a non-database field (for example a counter or static image)
+		*/
+		$columns = array( 'id', 'twitter_username', 'twitterID', 'firstname' );
+		$get['columns'] = &$columns;
+	 
+		$em = $this->getDoctrine()->getEntityManager();
+		$rResult = $em->getRepository('UserBundle:User')->ajaxTable($get, true)->getArrayResult();
+	 
+		/* Data set length after filtering */
+		$iFilteredTotal = count($rResult);
+	 
+		/*
+		 * Output
+		 */
+		$output = array(
+		  "sEcho" => intval($get['sEcho']),
+		  "iTotalRecords" => $em->getRepository('UserBundle:User')->getCount(),
+		  "iTotalDisplayRecords" => $iFilteredTotal,
+		  "aaData" => array()
+		);
+	 
+		foreach($rResult as $aRow)
+		{
+		  $row = array();
+		  for ( $i=0 ; $i<count($columns) ; $i++ ){
+			if ( $columns[$i] == "version" ){
+			  /* Special output formatting for 'version' column */
+			  $row[] = ($aRow[ $columns[$i] ]=="0") ? '-' : $aRow[ $columns[$i] ];
+			}elseif ( $columns[$i] != ' ' ){
+			  /* General output */
+			  $row[] = $aRow[ $columns[$i] ];
+			}
+		  }
+		  $output['aaData'][] = $row;
+		}
+	 
+		unset($rResult);
+	 
+		return new Response(
+		  json_encode($output)
+		);
+	  }	
 
     /**
      * Creates a new Auditorsala entity.
