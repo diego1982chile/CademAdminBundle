@@ -73,7 +73,7 @@ class AuditorsalaController extends Controller
 		* you want to insert a non-database field (for example a counter or static image)
 		*/
 		// Se envían tripletas (alias,campo,alias_tabla)
-		$columns = array( array('auds','auditorid','s0'),									   
+		$columns = array( array('a','nombre','s5'),					  
 									   array('s','foliocadem','s1'),
 									   array('cad','nombre','s2'),
 									   array('can','nombre','s3'),
@@ -81,12 +81,13 @@ class AuditorsalaController extends Controller
 									   array('s','numerocalle','s1'),									   									   
 									   array('com','nombre','s4'),
 									   array('s','id','s1'),									   									  
-									   array('auds','id','s0'),									   									  
+									   array('auds','id','s0'),			
+									   array('auds','auditorid','s0'),									
 									);
 		
 		// Se deben recuperar datos de las tablas: auditorsala (s0), sala (s1), cadena (s2), canal (s3), comuna (s4)
 		
-		$columns_=array( 's0_auditorid', 's0_id', 's1_id', 's1_foliocadem', 's2_nombre', 's3_nombre','s1_calle', 's1_numerocalle', 's4_nombre' );
+		$columns_=array( 's0_auditorid', 's0_id', 's1_id', 's1_foliocadem', 's2_nombre', 's3_nombre','s1_calle', 's1_numerocalle', 's4_nombre', 's5_nombre' );
 		$get['columns'] = &$columns;
 	 
 		$em = $this->getDoctrine()->getEntityManager();
@@ -124,6 +125,7 @@ class AuditorsalaController extends Controller
 				case "s0_id":						
 				case "s1_id":					
 				case "s1_numerocalle":					
+				case "s5_nombre":
 					break;				
 				default:
 					 $row[] = $aRow[ $columns_[$i] ];
@@ -238,7 +240,8 @@ class AuditorsalaController extends Controller
         $entity = $em->getRepository('CademAdminBundle:Auditorsala')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Auditorsala entity.');
+            // throw $this->createNotFoundException('Unable to find Auditorsala entity.');
+			return new JsonResponse(array("status"=>false,"id"=>'',"Mensaje"=>"Unable to find Auditorsala entity"));
         }
 
         // $deleteForm = $this->createDeleteForm($id);
@@ -274,7 +277,8 @@ class AuditorsalaController extends Controller
             $entity = $em->getRepository('CademAdminBundle:Auditorsala')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Auditorsala entity.');
+                // throw $this->createNotFoundException('Unable to find Auditorsala entity.');
+				return new JsonResponse(array("status"=>false,"id"=>'',"Mensaje"=>"Unable to find Auditorsala entity"));
             }						
             $em->remove($entity);
             $em->flush();
