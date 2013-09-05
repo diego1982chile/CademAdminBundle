@@ -64,24 +64,24 @@ class EstudiosalaController extends Controller
 			$fila=array();
 			$fila['aTargets']=array($cont);		
 			$fila['sTitle']=$prefix;
-			// switch($prefix)
-			// {
-				// case 'Folio':
-					// $fila['sWidth']="100px";
-					// break;
-				// case 'Cadena':
-					// $fila['sWidth']="150px";
-					// break;
-				// case 'Canal':
-					// $fila['sWidth']="150px";
-					// break;		
-				// case 'Dirección':
-					// $fila['sWidth']="200px";
-					// break;			
-				// case 'Comuna':
-					// $fila['sWidth']="150px";
-					// break;					
-			// }			
+			switch($prefix)
+			{
+				case 'Folio':
+					$fila['sWidth']="100px";
+					break;
+				case 'Cadena':
+					$fila['sWidth']="150px";
+					break;
+				case 'Canal':
+					$fila['sWidth']="150px";
+					break;		
+				case 'Dirección':
+					$fila['sWidth']="200px";
+					break;			
+				case 'Comuna':
+					$fila['sWidth']="150px";
+					break;					
+			}			
 			// $fila['sWidth']="3%";
 			array_push($aoColumnDefs,$fila);
 			$cont++;					
@@ -105,10 +105,18 @@ class EstudiosalaController extends Controller
         // $entities = $em->getRepository('CademAdminBundle:Auditorsala')->findAll();
 		
 		$session = $this->get("session");
-		$session->set("estudios",$estudios);				
+		$session->set("estudios",$estudios);								
+		
+		// Calcula el ancho máximo de la tabla	
+		$extension=(5+count($head))*10-100;
+		
+		$max_width=100+$extension;	
 		
 		unset($estudios_aux);
 		unset($head);
+	
+		if($extension<0)
+			$extension=0;					
 		
 		$entity = new Estudiosala();
         $form   = $this->createForm(new EstudiosalaType(), $entity);			
@@ -117,6 +125,7 @@ class EstudiosalaController extends Controller
             // 'entity' => $entity,
             'form'   => $form->createView(),
 			'aoColumnDefs' => json_encode($aoColumnDefs),	
+			'max_width' => $max_width,
         ));
     }
 	

@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  * Sala
  *
  * @ORM\Table(name="SALA")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Cadem\AdminBundle\Repository\SalaRepository")
  */
 class Sala
 {

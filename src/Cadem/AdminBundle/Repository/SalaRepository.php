@@ -34,12 +34,17 @@ class SalaRepository extends EntityRepository
       $get['columns'] = array('id');
  
     $aColumns = array();
-    foreach($get['columns'] as $value) $aColumns[] = $alias .'.'. $value;
+    
+	foreach($get['columns'] as $value) 		
+		$aColumns[] = $value[0].'.'.$value[1].' as '.$value[2].'_'.$value[1];								
  
     $cb = $this->getEntityManager()
       ->getRepository($tableObjectName)
-      ->createQueryBuilder($alias)
-      ->select(str_replace(" , ", " ", implode(", ", $aColumns)));
+      ->createQueryBuilder($alias)      
+	  ->select(str_replace(" , ", " ", implode(", ", $aColumns)))	  	  
+	  ->leftjoin('s.cadena','cad')
+	  ->leftjoin('s.canal','can')
+	  ->leftjoin('s.comuna','com');
  
     if ( isset( $get['iDisplayStart'] ) && $get['iDisplayLength'] != '-1' ){
       $cb->setFirstResult( (int)$get['iDisplayStart'] )
@@ -52,7 +57,8 @@ class SalaRepository extends EntityRepository
     if ( isset( $get['iSortCol_0'] ) ){
       for ( $i=0 ; $i<intval( $get['iSortingCols'] ) ; $i++ ){
         if ( $get[ 'bSortable_'.intval($get['iSortCol_'.$i]) ] == "true" ){
-          $cb->orderBy($aColumns[ (int)$get['iSortCol_'.$i] ], $get['sSortDir_'.$i]);
+          // $cb->orderBy($aColumns[ (int)$get['iSortCol_'.$i] ], $get['sSortDir_'.$i]);
+		  $cb->orderBy(explode('as',$aColumns[ (int)$get['iSortCol_'.$i] ])[0], $get['sSortDir_'.$i]);
         }
       }
     }
@@ -67,7 +73,8 @@ class SalaRepository extends EntityRepository
       $aLike = array();
       for ( $i=0 ; $i<count($aColumns) ; $i++ ){
         if ( isset($get['bSearchable_'.$i]) && $get['bSearchable_'.$i] == "true" ){
-          $aLike[] = $cb->expr()->like($aColumns[$i], '\'%'. $get['sSearch'] .'%\'');
+          // $aLike[] = $cb->expr()->like($aColumns[$i], '\'%'. $get['sSearch'] .'%\'');
+		  $aLike[] = $cb->expr()->like(explode('as',$aColumns[$i])[0], '\'%'. $get['sSearch'] .'%\'');
         }
       }
       if(count($aLike) > 0) $cb->andWhere(new Expr\Orx($aLike));

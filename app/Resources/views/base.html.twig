@@ -134,7 +134,7 @@
 							<li class="dropdown">
 				                <a href="#"  class="dropdown-toggle" data-toggle="dropdown">Salas <b class="caret"></b></a>
 				                <ul class="dropdown-menu">
-								  <li><a href="{{ path('estudio')}}">Sala</a></li>
+								  <li><a href="{{ path('sala')}}">Sala</a></li>
 				                  <li><a href="{{ path('estudiosala')}}">Sala-Cliente</a></li>				                  
 				                </ul>
 			                </li>
@@ -158,7 +158,7 @@
       <hr style="margin:10px 0">      
 
     </div><!--/.fluid-container-->				   	
-		{% set currentroute = path(app.request.attributes.get('_route'))|split('/')[path(app.request.attributes.get('_route'))|split('/')|length-2] %}	 		
+		{% set currentroute = path(app.request.attributes.get('_route'))|split('/')[path(app.request.attributes.get('_route'))|split('/')|length-2] %}	 				
 		<script src="{{ asset('bundles/cademadmin/js/jquery-1.9.1.min.js') }}"></script>
 		<script src="{{ asset('bundles/cademadmin/js/jquery-ui.min.js') }}"></script>
 		<script src="{{ asset('bundles/cademadmin/js/bootstrap.min.js') }}"></script>	
@@ -189,11 +189,12 @@
 				// "bAutoWidth": true, 							
 			});
 									
-			{% elseif currentroute in ['auditorsala'] %}								
+			{% elseif currentroute in ['sala','auditorsala'] %}								
+			
 			oTable = $('table.records_list').dataTable({								
 				"bProcessing": true,
 				"bServerSide": true,
-				"sAjaxSource": "{{ path('auditorsala_body') }}",
+				"sAjaxSource": "{{ path(currentroute~'_body') }}",
 				"sScrollY": "360px",
 				// "sScrollX": "100%",
 				// "sScrollXInner": maxWidth+'%',
@@ -203,7 +204,18 @@
 				"bInfo": false,
 				"bPaginate": false,
 				"bJQueryUI": true,
-				"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>"
+				"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+				"fnPreDrawCallback": function() {							
+						$.loader({
+							className:"blue-with-image-2",
+							content:''
+						});
+						return true;
+				},
+				"fnDrawCallback": function() {
+						// in case your overlay needs to be put away automatically you can put it here
+						$.loader('close');				
+				},									
 				// "bAutoWidth": true, 							
 			});
 			
@@ -215,7 +227,7 @@
 				"sAjaxSource": "{{ path('estudiosala_body') }}",
 				"sScrollY": "360px",
 				"sScrollX": "100%",
-				"sScrollXInner": '120%',
+				"sScrollXInner": '{{max_width}}%',
 				"bScrollCollapse": false,
 				"aoColumnDefs": {{aoColumnDefs|raw}},				
 				"bFilter": true,
@@ -224,10 +236,17 @@
 				"bPaginate": false,
 				"bJQueryUI": true,
 				"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
-				"fnDrawCallback": function() {					
-					$('.DTFC_LeftWrapper:last').css('height', ($('.DTFC_LeftWrapper:last').height()-15) + 'px'  );
-					$('.DTFC_LeftFootWrapper').hide();					
+				"fnPreDrawCallback": function() {							
+						$.loader({
+							className:"blue-with-image-2",
+							content:''
+						});
+						return true;
 				},
+				"fnDrawCallback": function() {
+						// in case your overlay needs to be put away automatically you can put it here
+						$.loader('close');				
+				},								
 				"fnInitComplete": function() {		
 					new FixedColumns( oTable, {
 						"sHeightMatch": "none",		

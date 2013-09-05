@@ -4,7 +4,7 @@ sala:
 
 sala_show:
     pattern:  /{id}/show
-    defaults: { _controller: "CademAdminBundle:Sala:show" }
+    defaults: { _controller: "CademAdminBundle:Sala:show", id: default_id } 
 
 sala_new:
     pattern:  /new
@@ -17,7 +17,7 @@ sala_create:
 
 sala_edit:
     pattern:  /{id}/edit
-    defaults: { _controller: "CademAdminBundle:Sala:edit" }
+    defaults: { _controller: "CademAdminBundle:Sala:edit",  id: default_id }
 
 sala_update:
     pattern:  /{id}/update
@@ -28,3 +28,7 @@ sala_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "CademAdminBundle:Sala:delete" }
     requirements: { _method: post|delete }
+sala_body:
+    pattern:  /body
+    defaults: { _controller: "CademAdminBundle:Sala:body" }
+    requirements: { _method: get }
