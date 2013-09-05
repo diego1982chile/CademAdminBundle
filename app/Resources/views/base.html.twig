@@ -66,9 +66,18 @@
 				vertical-align: middle !important;
 			}	
 			
+			table tr th{
+				vertical-align: middle !important;
+			}
+			
 			h1{
 				
 			}
+			
+			.columna{
+				text-align: center !important;
+			}
+						
 		  
 		  {% block customstyles %}{% endblock %}
 		</style>
@@ -215,11 +224,17 @@
 				"bPaginate": false,
 				"bJQueryUI": true,
 				"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+				"fnDrawCallback": function() {					
+					$('.DTFC_LeftWrapper:last').css('height', ($('.DTFC_LeftWrapper:last').height()-15) + 'px'  );
+					$('.DTFC_LeftFootWrapper').hide();					
+				},
 				"fnInitComplete": function() {		
 					new FixedColumns( oTable, {
 						"sHeightMatch": "none",		
-						"iLeftColumns": 5,
-					});				
+						"iLeftColumns": 5,						
+					});							
+					$('.DTFC_LeftWrapper:last').css('height', ($('.DTFC_LeftWrapper:last').height()-15) + 'px'  );
+					$('.DTFC_LeftFootWrapper').hide();					
 				}
 				// "bAutoWidth": true, 							
 			});

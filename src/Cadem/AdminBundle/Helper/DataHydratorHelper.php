@@ -13,14 +13,21 @@ class DataHydratorHelper {
 		$num_regs=count($dataSet);		
 		$cont_cols=0;
 		$cont_regs=0;		
-		$num_cols=count($columnas);													
+		$num_cols=count($columnas);					
+
+		$prefixes=array_fill(0,5,"");																								
 		
 		if($num_regs>0)
 		{					
 			// Para llevar los cambios del 1er nivel de agregacion
 			$nivel1=$dataSet[$cont_regs]['s0_id'];			
 			// Lleno la fila con vacios, le agrego 3 posiciones, correspondientes a los niveles de agregación y al total															
-			$fila=array_fill(0,$num_cols+5,"<input type='checkbox' />");																								
+			// $fila=array_fill(0,$num_cols+5,"<input id='estudiosala'  type='checkbox' />");																								
+			$fila=array();
+			foreach($prefixes as $prefix)
+				array_push($fila,$prefix);						
+			foreach($columnas as $columna)			
+				array_push($fila,"<input id='estudiosala' sala='".$dataSet[$cont_regs]['s0_id']."' estudio='".$columna."' estudiosala type='checkbox'  />");			
 			
 			while($cont_regs<$num_regs)
 			{	
@@ -31,10 +38,10 @@ class DataHydratorHelper {
 					$fila[0]=$dataSet[$cont_regs]['s0_foliocadem'];																	
 					$fila[1]=$dataSet[$cont_regs]['s2_nombre'];												
 					$fila[2]=$dataSet[$cont_regs]['s3_nombre'];												
-					$fila[3]=$dataSet[$cont_regs]['s0_calle'].' '.$dataSet[$cont_regs]['s0_numerocalle'];												;																	
+					$fila[3]=$dataSet[$cont_regs]['s0_calle'].' '.$dataSet[$cont_regs]['s0_numerocalle'];																												
 					$fila[4]=$dataSet[$cont_regs]['s4_nombre'];							
 					if(!is_null($dataSet[$cont_regs]['s1_id']))
-						$fila[$columna_quiebre+5]="<input type='checkbox' checked />";											
+						$fila[$columna_quiebre+5]="<input id='estudiosala' sala='".$dataSet[$cont_regs]['s0_id']."' estudio='".$columnas[$cont_cols]."' estudiosala='".$dataSet[$cont_regs]['s1_id']."' type='checkbox' checked />";																
 					$cont_regs++;
 					$cont_cols++;
 				}	
@@ -45,7 +52,12 @@ class DataHydratorHelper {
 					$cont_cols=0;					
 					$nivel1=$dataSet[$cont_regs]['s0_id'];			
 					array_push($output,$fila);
-					$fila=array_fill(0,$num_cols+5,"<input type='checkbox' />");							
+					// $fila=array_fill(0,$num_cols+5,"<input id='estudiosala' sala='".$dataSet[$cont_regs]['s0_id']."' estudio='".$dataSet[$cont_regs]['s5_id']."' estudiosala='".$dataSet[$cont_regs]['s1_id']."' type='checkbox' />");							
+					$fila=array();
+					foreach($prefixes as $prefix)
+						array_push($fila,$prefix);						
+					foreach($columnas as $columna)			
+						array_push($fila,"<input id='estudiosala' sala='".$dataSet[$cont_regs]['s0_id']."' estudio='".$columna."' estudiosala type='checkbox'  />");								
 				}
 				if($cont_regs==$num_regs)		
 				{					

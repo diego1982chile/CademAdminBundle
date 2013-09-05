@@ -14,6 +14,8 @@ estudiosala_create:
     pattern:  /create
     defaults: { _controller: "CademAdminBundle:Estudiosala:create" }
     requirements: { _method: post }
+    options:
+        expose: true		
 
 estudiosala_edit:
     pattern:  /{id}/edit
@@ -28,6 +30,8 @@ estudiosala_delete:
     pattern:  /{id}/delete
     defaults: { _controller: "CademAdminBundle:Estudiosala:delete" }
     requirements: { _method: post|delete }
+    options:
+        expose: true	
 
 estudiosala_body:
     pattern:  /body

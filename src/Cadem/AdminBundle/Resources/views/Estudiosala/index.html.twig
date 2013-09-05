@@ -1,8 +1,24 @@
 {% extends '::base.html.twig' %}
+{% block customstyles %}
+tbody tr{
+	height: 3.5em !important;
+}
+td{
+	font-size: .8em !important;				
+	font-family: "Arial",Georgia,Serif !important;
+}
+{% endblock %}
 
 {% block body -%}
     <h1>Estudiosala list</h1>
-
+	<div style='display:none'>
+	<form id='estudiosala' action="{{ path('estudiosala_create') }}" method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <p>
+            <button type="submit">Create</button>
+        </p>
+    </form>
+	</div>
     <table cellpadding="0" cellspacing="0" border="0" class="records_list table table-striped table-bordered" width='100%'>        
     </table>
         <ul>
@@ -13,3 +29,63 @@
         </li>
     </ul>
     {% endblock %}
+	{% block javascripts %}
+	<script>
+	$(document).ready(function () {
+	
+		var node;
+	
+		$(document).on("click", "input#estudiosala", function(event){
+									
+			$.loader({
+				className:"blue-with-image-2",
+				content:''
+			});
+			
+			node=$(event.target);
+			
+			// Actualizar el form
+			$("#cadem_adminbundle_estudiosalatype_estudio").val($(this).attr('estudio'));
+			$("#cadem_adminbundle_estudiosalatype_sala").val($(this).attr('sala'));
+			$("#cadem_adminbundle_estudiosalatype_activo").prop('checked',true);
+						
+			// Saber si se asigna o se desasigna (si se asigna la propiedad debe estar checked, si se desasigna la propiedad debe estar checked false)
+			
+			var asignacion= $(this).prop('checked');			
+			var estudiosala= $(this).attr('estudiosala');									
+			
+			// Actualizar el action del form
+			if(asignacion)
+				$('form#estudiosala').attr('action',Routing.generate('estudiosala_create'));				
+			else
+				$('form#estudiosala').attr('action',Routing.generate('estudiosala_delete', { id: estudiosala }));			
+			
+			// Ejecutar submit
+			$('form#estudiosala').submit();			
+		});
+		
+		$('form#estudiosala').submit(function(){			
+			var dataform = $(this).serializeArray();						
+		
+			$.post($(this).attr('action'),dataform,function(data){										
+			
+				// $('.loader').remove();
+				$.loader('close');				
+				
+				if(data.status)
+				{
+					alert("Cambios realizados existosamente");
+					$(node).attr('estudiosala',data.id);
+				}
+				else
+				{
+					alert("Error: "+data.mensaje);
+				}
+			
+			});
+			return false;
+		});
+	
+	});
+	</script>
+	{% endblock %}

@@ -64,6 +64,24 @@ class EstudiosalaController extends Controller
 			$fila=array();
 			$fila['aTargets']=array($cont);		
 			$fila['sTitle']=$prefix;
+			// switch($prefix)
+			// {
+				// case 'Folio':
+					// $fila['sWidth']="100px";
+					// break;
+				// case 'Cadena':
+					// $fila['sWidth']="150px";
+					// break;
+				// case 'Canal':
+					// $fila['sWidth']="150px";
+					// break;		
+				// case 'Dirección':
+					// $fila['sWidth']="200px";
+					// break;			
+				// case 'Comuna':
+					// $fila['sWidth']="150px";
+					// break;					
+			// }			
 			// $fila['sWidth']="3%";
 			array_push($aoColumnDefs,$fila);
 			$cont++;					
@@ -77,8 +95,9 @@ class EstudiosalaController extends Controller
 			$fila=array();
 			$fila['aTargets']=array($cont);		
 			$fila['sTitle']=$estudio['nombre'];
-			$fila['bSortable']=false;
-			// $fila['sWidth']="3%";
+			$fila['sClass']='columna';
+			$fila['bSortable']=false;			
+			$fila['sWidth']="30px";
 			array_push($aoColumnDefs,$fila);
 			$cont++;					
 		}					
@@ -122,17 +141,18 @@ class EstudiosalaController extends Controller
 		$columns = array( array('s','foliocadem','s0'),
 									   array('cad','nombre','s2'),
 									   array('can','nombre','s3'),
-									   array('s','calle','s0'),
-									   array('s','numerocalle','s0'),									   									   
+									   array('s','calle','s0'),									   									   									  
 									   array('com','nombre','s4'),
+									   array('s','numerocalle','s0'),
 									   array('s','id','s0'),									   									  
-									   array('ests','id','s1'),			
+									   array('ests','id','s1'),	
+									   array('e','id','s5'),									   									  
 									   // array('auds','auditorid','s0'),									
 									);
 		
 		// Se deben recuperar datos de las tablas: auditorsala (s0), sala (s1), cadena (s2), canal (s3), comuna (s4)
 		
-		$columns_=array(  's1_id', 's0_foliocadem', 's1_nombre', 's2_nombre','s0_calle', 's0_numerocalle', 's3_nombre' );
+		$columns_=array(  's1_id', 's0_foliocadem', 's1_nombre', 's2_nombre','s0_calle', 's0_numerocalle', 's3_nombre','s5_id','s0_id' );
 		$get['columns'] = &$columns;
 	 
 		$em = $this->getDoctrine()->getEntityManager();
@@ -175,13 +195,16 @@ class EstudiosalaController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('estudiosala_show', array('id' => $entity->getId())));
+            // return $this->redirect($this->generateUrl('estudiosala_show', array('id' => $entity->getId())));
+			return new JsonResponse(array("status"=>true,"id"=>$entity->getId()));
         }
+		
+		return new JsonResponse(array("status"=>false,"id"=>''));
 
-        return $this->render('CademAdminBundle:Estudiosala:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        ));
+        // return $this->render('CademAdminBundle:Estudiosala:new.html.twig', array(
+            // 'entity' => $entity,
+            // 'form'   => $form->createView(),
+        // ));
     }
 
     /**
@@ -285,19 +308,20 @@ class EstudiosalaController extends Controller
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
-        if ($form->isValid()) {
+        // if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('CademAdminBundle:Estudiosala')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Estudiosala entity.');
+                // throw $this->createNotFoundException('Unable to find Estudiosala entity.');
+				return new JsonResponse(array("status"=>false,"id"=>'',"Mensaje"=>"Unable to find Estudiosala entity"));
             }
 
             $em->remove($entity);
             $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('estudiosala'));
+        // }
+		return new JsonResponse(array("status"=>true,"id"=>''));
+        // return $this->redirect($this->generateUrl('estudiosala'));
     }
 
     /**
