@@ -12,17 +12,15 @@ class SalaType extends AbstractType
     {
         $builder
             ->add('foliocadem')
+			->add('cadena')
+            ->add('canal')
             ->add('calle')
             ->add('numerocalle')
+			->add('comuna')
             ->add('latitud')
-            ->add('longitud')
-            ->add('respuestaGmap')
-            ->add('tipoGmap')
-            ->add('activo')
-            ->add('comuna')
-            ->add('formato')
-            ->add('cadena')
-            ->add('canal')
+            ->add('longitud')            
+            ->add('activo')            
+            // ->add('formato')            
         ;
     }
 

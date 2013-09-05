@@ -102,7 +102,7 @@ class SalaController extends Controller
 				case "s0_numerocalle":									
 					break;			
 				case "activo":
-					$row[] =($aRow['s0_activo']) ? "<input type='checkbox' checked />" : "<input type='checkbox'  />";
+					$row[] =($aRow['s0_activo']) ? "<input type='checkbox' sala='".$aRow['s0_id']."' checked />" : "<input type='checkbox' sala='".$aRow['s0_id']."' />";
 					break;					
 				case "actions":
 					$row[] ="<ul><li><a href='".$this->generateUrl('sala_show', array( "id" => $aRow['s0_id']) )."'>show</a></li><li><a href='".$this->generateUrl('sala_edit', array( "id" => $aRow['s0_id']) )."'>edit</a></li></ul>";

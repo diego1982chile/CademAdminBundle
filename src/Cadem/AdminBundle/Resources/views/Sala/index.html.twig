@@ -2,7 +2,14 @@
 
 {% block body -%}
     <h1>Sala list</h1>
-
+	<div style='display:none'>
+	<form id='sala' action="{{ path('sala_create') }}" method="post" {{ form_enctype(form) }}>
+        {{ form_widget(form) }}
+        <p>
+            <button type="submit">Create</button>
+        </p>
+    </form>
+	</div>
     <table cellpadding="0" cellspacing="0" border="0" class="records_list table table-striped table-bordered" width='100%'>
         <thead>
             <tr>                
@@ -20,7 +27,6 @@
         <tbody>        
         </tbody>
     </table>
-
         <ul>
         <li>
             <a href="{{ path('sala_new') }}">
@@ -29,3 +35,58 @@
         </li>
     </ul>
     {% endblock %}
+
+	{% block javascripts %}
+	<script>
+	$(document).ready(function () {
+	
+		var node;
+	
+		$(document).on("click", "input#sala", function(event){
+			
+			// $(this).parent().append("<img class='loader' alt='' style='float:right;margin-left:0px' src='{{ asset('bundles/cademadmin/images/loader-minitrans.gif') }}'  >");	
+			$.loader({
+				className:"blue-with-image-2",
+				content:''
+			});
+			node=$(event.target);
+			
+			// Actualizar el form			
+			$("#cadem_adminbundle_salatype_activo").prop('checked',$(this).prop('checked'));
+			
+			// Obtener el auditor anterior
+			var idsala=$(this).attr('sala');						
+			
+			// Actualizar el action del form
+						
+			$('form#sala').attr('action',Routing.generate('sala_update', { id: idsala }));			
+			
+			// Ejecutar submit
+			$('form#sala').submit();			
+		});
+		
+		$('form#sala').submit(function(){			
+			var dataform = $(this).serializeArray();		
+		
+			$.post($(this).attr('action'),dataform,function(data){										
+			
+				// $('.loader').remove();
+				$.loader('close');				
+				
+				if(data.status)
+				{
+					alert("Cambios realizados existosamente");
+					$(node).attr('sala',data.id);
+				}
+				else
+				{
+					alert("Error: "+data.mensaje);
+				}
+			
+			});
+			return false;
+		});
+	
+	});
+	</script>
+	{% endblock %}
