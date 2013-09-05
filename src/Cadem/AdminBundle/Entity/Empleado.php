@@ -333,4 +333,9 @@ class Empleado
     {
         return $this->estudiovariables;
     }
+	
+	public function __toString()
+	{
+		return $this->nombre;
+	}
 }

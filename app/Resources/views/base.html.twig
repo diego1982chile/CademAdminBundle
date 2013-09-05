@@ -135,7 +135,7 @@
 				                <a href="#"  class="dropdown-toggle" data-toggle="dropdown">Salas <b class="caret"></b></a>
 				                <ul class="dropdown-menu">
 								  <li><a href="{{ path('sala')}}">Sala</a></li>
-				                  <li><a href="{{ path('estudiosala')}}">Sala-Cliente</a></li>				                  
+				                  <li><a href="{{ path('salacliente')}}">Sala-Cliente</a></li>				                  
 				                </ul>
 			                </li>
 			                <li class="divider-vertical"></li>			                
@@ -219,12 +219,12 @@
 				// "bAutoWidth": true, 							
 			});
 			
-			{% elseif currentroute in ['estudiosala'] %}								
+			{% elseif currentroute in ['salacliente','estudiosala'] %}								
 			$('table.records_list').css('max-width','120%');
 			oTable = $('table.records_list').dataTable({								
 				"bProcessing": true,
 				"bServerSide": true,
-				"sAjaxSource": "{{ path('estudiosala_body') }}",
+				"sAjaxSource": "{{ path(currentroute~'_body') }}",
 				"sScrollY": "360px",
 				"sScrollX": "100%",
 				"sScrollXInner": '{{max_width}}%',

@@ -1,0 +1,24 @@
+{% extends '::base.html.twig' %}
+{% block customstyles %}
+tbody tr{
+	height: 3.5em !important;
+}
+td{
+	font-size: .8em !important;				
+	font-family: "Arial",Georgia,Serif !important;
+}
+{% endblock %}
+{% block body -%}
+    <h1>Salacliente list</h1>
+
+    <table class="records_list">        
+    </table>
+
+        <ul>
+        <li>
+            <a href="{{ path('salacliente_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

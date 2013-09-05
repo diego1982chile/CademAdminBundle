@@ -26,3 +26,6 @@ CademAdminBundle_auditorsala:
 CademAdminBundle_estudiosala:
     resource: "@CademAdminBundle/Resources/config/routing/estudiosala.yml"
     prefix:   /estudiosala	 
+CademAdminBundle_salacliente:
+    resource: "@CademAdminBundle/Resources/config/routing/salacliente.yml"
+    prefix:   /salacliente	
