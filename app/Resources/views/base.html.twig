@@ -13,7 +13,7 @@
 		<link href="{{ asset('bundles/cademadmin/css/jquery.dataTables.css') }}" rel="stylesheet">
 		<link href="{{ asset('bundles/cademadmin/css/demo_table.css') }}" rel="stylesheet">
 		<link href="{{ asset('bundles/cademadmin/css/jquery.loader.css') }}" rel="stylesheet" />
-		
+		<link href="{{ asset('bundles/cademadmin/css/jquery.handsontable.full.css') }}" rel="stylesheet" media='screen' />					
 		<style type="text/css">
 		  body {
 			padding-top: 60px;
@@ -76,7 +76,7 @@
 			
 			.columna{
 				text-align: center !important;
-			}
+			}						
 						
 		  
 		  {% block customstyles %}{% endblock %}
@@ -168,6 +168,7 @@
 		<script src="{{ asset('bundles/cademadmin/js/dataTables.fixedColumns.js') }}"></script>
 		<script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
 		<script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+		<script src="{{ asset('bundles/cademadmin/js/jquery.handsontable.full.js') }}"></script>		
         {% block javascripts %}{% endblock %}
 		<script>		
 		var oTable;
@@ -219,44 +220,46 @@
 				// "bAutoWidth": true, 							
 			});
 			
-			{% elseif currentroute in ['salacliente','estudiosala'] %}								
-			$('table.records_list').css('max-width','120%');
-			oTable = $('table.records_list').dataTable({								
-				"bProcessing": true,
-				"bServerSide": true,
-				"sAjaxSource": "{{ path(currentroute~'_body') }}",
-				"sScrollY": "360px",
-				"sScrollX": "100%",
-				"sScrollXInner": '{{max_width}}%',
-				"bScrollCollapse": false,
-				"aoColumnDefs": {{aoColumnDefs|raw}},				
-				"bFilter": true,
-				"bSort": true,
-				"bInfo": false,
-				"bPaginate": false,
-				"bJQueryUI": true,
-				"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
-				"fnPreDrawCallback": function() {							
-						$.loader({
-							className:"blue-with-image-2",
-							content:''
-						});
-						return true;
-				},
-				"fnDrawCallback": function() {
-						// in case your overlay needs to be put away automatically you can put it here
-						$.loader('close');				
-				},								
-				"fnInitComplete": function() {		
-					new FixedColumns( oTable, {
-						"sHeightMatch": "none",		
-						"iLeftColumns": 5,						
-					});							
-					$('.DTFC_LeftWrapper:last').css('height', ($('.DTFC_LeftWrapper:last').height()-15) + 'px'  );
-					$('.DTFC_LeftFootWrapper').hide();					
-				}
-				// "bAutoWidth": true, 							
-			});
+			{% elseif currentroute in ['salacliente','estudiosala'] %}																																	
+					
+			// $('table.records_list').css('max-width','120%');
+
+			// oTable = $('table.records_list').dataTable({								
+				// "bProcessing": true,
+				// "bServerSide": true,
+				// "sAjaxSource": "{{ path(currentroute~'_body') }}",
+				// "sScrollY": "360px",
+				// "sScrollX": "100%",
+				// "sScrollXInner": '{{max_width}}%',
+				// "bScrollCollapse": false,
+				// "aoColumnDefs": {{aoColumnDefs|raw}},				
+				// "bFilter": true,
+				// "bSort": true,
+				// "bInfo": false,
+				// "bPaginate": false,
+				// "bJQueryUI": true,
+				// "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+				// "fnPreDrawCallback": function() {							
+						// $.loader({
+							// className:"blue-with-image-2",
+							// content:''
+						// });
+						// return true;
+				// },
+				// "fnDrawCallback": function() {
+						// // in case your overlay needs to be put away automatically you can put it here
+						// $.loader('close');				
+				// },								
+				// "fnInitComplete": function() {		
+					// new FixedColumns( oTable, {
+						// "sHeightMatch": "none",		
+						// "iLeftColumns": 5,						
+					// });							
+					// $('.DTFC_LeftWrapper:last').css('height', ($('.DTFC_LeftWrapper:last').height()-15) + 'px'  );
+					// $('.DTFC_LeftFootWrapper').hide();					
+				// }
+				// // "bAutoWidth": true, 							
+			// });
 			
 			{% endif %}
 			

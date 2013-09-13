@@ -40,6 +40,7 @@ class EstudiosalaController extends Controller
 		$head=array();		
 		$estudios_aux=array();		
 		
+				
 		// Generamos el head de la tabla, y los estudios
 		foreach($estudios_ as $estudio)
 		{
@@ -56,34 +57,36 @@ class EstudiosalaController extends Controller
 		
 		// CONSTRUIR EL ENCABEZADO DE LA TABLA
 		$aoColumnDefs=array();
+		$columns=array();		
 		$prefixes=array('Folio','Cadena','Canal','Dirección','Comuna');				
 		$cont=0;
-		
+				
 		foreach($prefixes as $prefix)
 		{						
-			$fila=array();
-			$fila['aTargets']=array($cont);		
-			$fila['sTitle']=$prefix;
-			switch($prefix)
-			{
-				case 'Folio':
-					$fila['sWidth']="100px";
-					break;
-				case 'Cadena':
-					$fila['sWidth']="150px";
-					break;
-				case 'Canal':
-					$fila['sWidth']="150px";
-					break;		
-				case 'Dirección':
-					$fila['sWidth']="200px";
-					break;			
-				case 'Comuna':
-					$fila['sWidth']="150px";
-					break;					
-			}			
+			// $fila=array();
+			// $fila['aTargets']=array($cont);		
+			// $fila['sTitle']=$prefix;
+			// switch($prefix)
+			// {
+				// case 'Folio':
+					// $fila['sWidth']="100px";
+					// break;
+				// case 'Cadena':
+					// $fila['sWidth']="150px";
+					// break;
+				// case 'Canal':
+					// $fila['sWidth']="150px";
+					// break;		
+				// case 'Dirección':
+					// $fila['sWidth']="200px";
+					// break;			
+				// case 'Comuna':
+					// $fila['sWidth']="150px";
+					// break;					
+			// }			
 			// $fila['sWidth']="3%";
-			array_push($aoColumnDefs,$fila);
+			// array_push($aoColumnDefs,$fila);
+			array_push($aoColumnDefs,$prefix);			
 			$cont++;					
 		}
 				
@@ -92,20 +95,21 @@ class EstudiosalaController extends Controller
 		foreach($estudios_aux as $estudio)
 		{			
 			array_push($estudios,$estudio['id']);				
-			$fila=array();
-			$fila['aTargets']=array($cont);		
-			$fila['sTitle']=$estudio['nombre'];
-			$fila['sClass']='columna';
-			$fila['bSortable']=false;			
-			$fila['sWidth']="30px";
-			array_push($aoColumnDefs,$fila);
+			// $fila=array();
+			// $fila['aTargets']=array($cont);		
+			// $fila['sTitle']=$estudio['nombre'];
+			// $fila['sClass']='columna';
+			// $fila['bSortable']=false;			
+			// $fila['sWidth']="30px";
+			// array_push($aoColumnDefs,$fila);
+			array_push($aoColumnDefs,$estudio['nombre']);		
 			$cont++;					
 		}					
 				
         // $entities = $em->getRepository('CademAdminBundle:Auditorsala')->findAll();
 		
-		$session = $this->get("session");
-		$session->set("estudios",$estudios);								
+		// $session = $this->get("session");
+		// $session->set("estudios",$estudios);								
 		
 		// Calcula el ancho máximo de la tabla	
 		$extension=(5+count($head))*10-100;
@@ -120,11 +124,57 @@ class EstudiosalaController extends Controller
 		
 		$entity = new Estudiosala();
         $form   = $this->createForm(new EstudiosalaType(), $entity);			
+		
+		/* Array of database columns which should be read and sent back to DataTables. Use a space where
+		* you want to insert a non-database field (for example a counter or static image)
+		*/
+		// Se envían tripletas (alias,campo,alias_tabla)
+		$columns = array( array('s','foliocadem','s0'),
+									   array('cad','nombre','s2'),
+									   array('can','nombre','s3'),
+									   array('s','calle','s0'),									   									   									  
+									   array('com','nombre','s4'),
+									   array('s','numerocalle','s0'),
+									   array('s','id','s0'),									   									  
+									   array('ests','id','s1'),	
+									   array('e','id','s5'),									   									  
+									   // array('auds','auditorid','s0'),									
+									);
+		
+		// Se deben recuperar datos de las tablas: auditorsala (s0), sala (s1), cadena (s2), canal (s3), comuna (s4)
+		
+		$columns_=array(  's1_id', 's0_foliocadem', 's1_nombre', 's2_nombre','s0_calle', 's0_numerocalle', 's3_nombre','s5_id','s0_id' );
+		$get['columns'] = &$columns;
+	 
+		$em = $this->getDoctrine()->getEntityManager();
+		$rResult = $em->getRepository('CademAdminBundle:Estudiosala')->ajaxTable($get, true)->getArrayResult();
+	 
+		/* Data set length after filtering */
+		$iFilteredTotal = count($rResult);			
+	 
+		/*
+		 * Output
+		 */
+		$output = array(
+		  // "sEcho" => intval($get['sEcho']),
+		  // "iTotalRecords" => $em->getRepository('CademAdminBundle:Estudiosala')->getCount(),
+		  // "iTotalDisplayRecords" => $iFilteredTotal,
+		  "aaData" => array()
+		);
+	 		
+		$output['aaData'] = $this->get('cadem_admin.helper.data_hydrator')->hydrateEstudiosalaHT($rResult,$estudios);														
+	 
+		unset($rResult);
+	 
+		// return new Response(
+		  // json_encode($output)
+		// );
 
         return $this->render('CademAdminBundle:Estudiosala:index.html.twig', array(
             // 'entity' => $entity,
             'form'   => $form->createView(),
-			'aoColumnDefs' => json_encode($aoColumnDefs),	
+			'aoColumnDefs' => json_encode($aoColumnDefs),				
+			'body' => json_encode($output['aaData']),
 			'max_width' => $max_width,
         ));
     }

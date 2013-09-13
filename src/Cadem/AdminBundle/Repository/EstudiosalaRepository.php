@@ -47,9 +47,9 @@ class EstudiosalaRepository extends EntityRepository
 	  ->leftjoin('s.cadena','cad')
 	  ->leftjoin('s.canal','can')
 	  ->leftjoin('s.comuna','com')
-	  ->orderBy('s.id')
-	  ->orderBy('e.id')
-	  ->orderBy('ests.id');
+	  ->orderBy('s.foliocadem');
+	  // ->orderBy('e.id');
+	  // ->orderBy('ests.id');
 	  // ->where('auds.id is null')
 	  // ->orWhere('auds.id is not null');
  

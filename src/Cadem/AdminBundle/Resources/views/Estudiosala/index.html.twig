@@ -7,6 +7,21 @@ td{
 	font-size: .8em !important;				
 	font-family: "Arial",Georgia,Serif !important;
 }
+.matched_active{			
+	border-style: solid !important;	
+	border-width: 2px !important;
+	border-color: yellow !important;
+	// background-color: #d1ffd1 !important;	
+	background-color:#fbb450 !important;
+}
+
+.matched{			
+	border-style: solid !important;
+	border-width: 2px !important;
+	border-color: yellow !important;
+	background-color: rgb(253, 255, 209) !important;
+}
+
 {% endblock %}
 
 {% block body -%}
@@ -18,7 +33,10 @@ td{
             <button type="submit">Create</button>
         </p>
     </form>
-	</div>
+	</div>			
+		<input id='buscar' />
+		<div id='dataTable'  style="width: 100%; height: 500px; overflow: scroll">
+		</div>				
     <table cellpadding="0" cellspacing="0" border="0" class="records_list table table-striped table-bordered" width='100%'>        
     </table>
         <ul>
@@ -31,9 +49,134 @@ td{
     {% endblock %}
 	{% block javascripts %}
 	<script>
+	
+	var data={{body|raw}};
+	var container;
+
+	// $(data).each(function(){
+		// alert(JSON.stringify(this));
+	// });
+	
+	var estudiosalaRenderer = function (instance, td, row, col, prop, value, cellProperties) {  						
+
+		var checked='';
+		if(value.estudiosala!='')			
+			checked='checked';		
+		var $img = $("<input id='estudiosala' type='checkbox' "+checked+">");
+		$img.attr('estudio', value.estudio);
+		$img.attr('sala', value.sala);
+		$img.attr('estudiosala', value.estudiosala);			
+		cellProperties.readOnly=true;
+		$img.on('mousedown', function (event) {
+		  event.preventDefault(); //prevent selection quirk
+		});
+		$(td).empty().append($img); //empty is needed because you are rendering to an existing cell  
+	  return td;
+	};
+	
+	function setFocus(id)
+	{
+		document.getElementById(id).focus();
+	}
+	
+	function listenerFiltro()
+	{		
+	var filtrado= false;
+	var indice=0;
+	var clase='';
+	var td;	
+
+	$('#buscar').keydown(function(e){						
+		$('#dataTable.wtHolder').animate({ scrollTop: 1000 });		
+		setTimeout("setFocus('buscar')", 0);			
+		switch(e.keyCode)
+		{			
+			case 13:									
+				var needle=$('#buscar').val().toUpperCase();	
+				var delta=$('table.htCore tbody tr:first').height();				
+				
+				// delta=0.97*delta;
+				var offset=delta;				
+				var row=0;
+				var col=0;				
+				
+				if(needle=='')
+				{
+					$('.matched').removeClass('matched');	
+					$('.matched_active').removeClass('matched_active');	
+					return false;
+				}
+				if(!filtrado)
+				{
+					filtrado=true;							
+					var hit=false;
+					// $('.ui-state-active').removeClass('ui-state-active');				
+					$('.matched').removeClass('matched');	
+					$('.matched_active').removeClass('matched_active');	
+					$(data).each(function(){													
+						$(this).each(function(){																				
+							if(col==5)
+							{
+								col=0;
+								return false;												
+							}
+							var haystack=this.toString().toUpperCase();															
+							
+							if (haystack.indexOf(needle)!=-1) {															
+								
+								if(!hit)							
+									clase='matched_active';														
+								else							
+									clase='matched';			
+								
+								td = container.handsontable('getCell', row, col);			
+								
+								
+								td.className = clase
+								
+								// $('table.htCore tbody').children(':eq('+row+')').addClass(clase);
+								hit=true;							
+							}
+							
+							++col;
+						});
+						++row;
+					});
+					if(hit)
+					{															
+						offset=($('.matched_active:first').index())*delta;
+						$('.dragdealer vertical').animate({ scrollTop: offset });		
+					}
+					else
+					{
+						alert('El item no fue encontrado');
+						$('#buscar').val('');
+						$('.dragdealer vertical').animate({ scrollTop: 0 });	
+					}
+				}
+				else
+				{									
+					offset=($('.matched:first').index())*delta;
+					if($('.matched').length<=2)
+						filtrado=false;
+					$('.matched_active').removeClass('matched_active');	
+					$('.matched:first').addClass('matched_active');
+					$('.matched:first').removeClass('matched');											
+					
+					$('.dragdealer vertical').animate({ scrollTop: offset });						
+				}				
+				break;
+			default:
+				filtrado=false;
+				break;				
+			}					
+		});		
+	}
+	
 	$(document).ready(function () {
 	
-		var node;
+		var node;								  				
+			
 	
 		$(document).on("click", "input#estudiosala", function(event){
 									
@@ -84,8 +227,36 @@ td{
 			
 			});
 			return false;
-		});
-	
-	});
+		});				
+		
+		container = $("#dataTable");				
+
+		Handsontable.cellLookup.renderer.estudiosalaRenderer = estudiosalaRenderer; //maps function to lookup string			
+			
+		container.handsontable({
+			// data: [['']],
+			// fixedRowsTop: 1,
+			// fixedColumnsLeft: 1,
+			colWidths: 150,
+			fixedColumnsLeft: 5,
+			manualColumnResize: true,
+			colHeaders: true,
+			colHeaders: {{aoColumnDefs|raw}},				
+			cells: function (row, col, prop) {
+				if(col>=5)
+				{
+					var cellProperties = {};												 
+					cellProperties.renderer = "estudiosalaRenderer"; //uses lookup map						
+					return cellProperties;
+				}
+				
+			},
+			fillHandle: false,
+			data: data,
+			columnSorting: true,
+		});	
+				
+		listenerFiltro();		
+	});	
 	</script>
 	{% endblock %}
