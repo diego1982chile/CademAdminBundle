@@ -46,7 +46,8 @@ class AuditorsalaRepository extends EntityRepository
 	  ->leftjoin('auds.auditor','a')
 	  ->leftjoin('s.cadena','cad')
 	  ->leftjoin('s.canal','can')
-	  ->leftjoin('s.comuna','com');
+	  ->leftjoin('s.comuna','com')
+	  ->orderBy('auds.auditor');;
 	  // ->where('auds.id is null')
 	  // ->orWhere('auds.id is not null');
  

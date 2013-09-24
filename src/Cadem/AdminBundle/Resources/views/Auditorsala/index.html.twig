@@ -1,4 +1,28 @@
 {% extends '::base.html.twig' %}
+{% block customstyles %}
+tbody tr{
+	height: 3.5em !important;
+}
+td{
+	font-size: .8em !important;				
+	font-family: "Arial",Georgia,Serif !important;
+}
+.matched_active{			
+	border-style: solid !important;	
+	border-width: 2px !important;
+	border-color: yellow !important;
+	// background-color: #d1ffd1 !important;	
+	background-color:#fbb450 !important;
+}
+
+.matched{			
+	border-style: solid !important;
+	border-width: 2px !important;
+	border-color: yellow !important;
+	background-color: rgb(253, 255, 209) !important;
+}
+
+{% endblock %}
 
 {% block body -%}
     <h1>Auditorsala list</h1>
@@ -10,20 +34,9 @@
         </p>
     </form>
 	</div>
-    <table cellpadding="0" cellspacing="0" border="0" class="records_list table table-striped table-bordered" width='100%'>
-        <thead>
-            <tr>
-                <th>Auditor</th>
-                <th>Folio</th>
-                <th>Cadena</th>
-                <th>Canal</th>
-                <th>Dirección</th>
-				<th>Comuna</th>
-            </tr>
-        </thead>
-        <tbody>        
-        </tbody>
-    </table>
+	<input id='buscar' />
+		<div id='dataTable'  style="width: 100%; height: 500px; overflow: scroll">
+		</div>				    
         <ul>
         <li>
             <a href="{{ path('auditorsala_new') }}">
@@ -34,11 +47,159 @@
     {% endblock %}
 	{% block javascripts %}
 	<script>
+	
+	var data={{body|raw}};
+	var auditores={{auditores|raw}};	
+	var container;
+	
+	function array_values (input) {
+	  // http://kevin.vanzonneveld.net
+	  // +   original by: Kevin van Zonneveld (http://kevin.vanzonneveld.net)
+	  // +      improved by: Brett Zamir (http://brett-zamir.me)
+	  // *     example 1: array_values( {firstname: 'Kevin', surname: 'van Zonneveld'} );
+	  // *     returns 1: {0: 'Kevin', 1: 'van Zonneveld'}
+	  var tmp_arr = [],
+		key = '';
+
+	  if (input && typeof input === 'object' && input.change_key_case) { // Duck-type check for our own array()-created PHPJS_Array
+		return input.values();
+	  }
+
+	  for (key in input) {
+		tmp_arr[tmp_arr.length] = input[key];
+	  }
+
+	  return tmp_arr;
+	}
+	
+	var auditorsalaRenderer = function (instance, td, row, col, prop, value, cellProperties) {  						
+
+		var $img = $("<input id='auditorsala' style='width:95%' />");
+		$img.attr('auditor', value.auditor);
+		$img.attr('sala', value.sala);
+		$img.attr('auditorsala', value.auditorsala);			
+		$img.attr('value', auditores[value.auditor]);			
+		cellProperties.readOnly=true;
+		$img.on('mousedown', function (event) {
+		  event.preventDefault(); //prevent selection quirk
+		});
+		$(td).empty().append($img); //empty is needed because you are rendering to an existing cell  
+		$( "#auditorsala" ).autocomplete({
+			source: array_values(auditores)
+		});	
+	  return td;
+	};
+	
+	function myAutocompleteRenderer(instance, td, row, col, prop, value, cellProperties) {
+		Handsontable.AutocompleteCell.renderer.apply(this, arguments);
+		td.style.fontStyle = 'italic';
+		td.title = 'Type to show the list of options';
+	}
+	
+	function setFocus(id)
+	{
+		document.getElementById(id).focus();
+	}
+	
+	function listenerFiltro()
+	{		
+	var filtrado= false;
+	var indice=0;
+	var clase='';
+	var td;	
+
+	$('#buscar').keydown(function(e){						
+		$('#dataTable.wtHolder').animate({ scrollTop: 1000 });		
+		setTimeout("setFocus('buscar')", 0);			
+		switch(e.keyCode)
+		{			
+			case 13:									
+				var needle=$('#buscar').val().toUpperCase();	
+				var delta=$('table.htCore tbody tr:first').height();				
+				
+				// delta=0.97*delta;
+				var offset=delta;				
+				var row=0;
+				var col=0;				
+				
+				if(needle=='')
+				{
+					$('.matched').removeClass('matched');	
+					$('.matched_active').removeClass('matched_active');	
+					return false;
+				}
+				if(!filtrado)
+				{
+					filtrado=true;							
+					var hit=false;
+					// $('.ui-state-active').removeClass('ui-state-active');				
+					$('.matched').removeClass('matched');	
+					$('.matched_active').removeClass('matched_active');	
+					$(data).each(function(){													
+						$(this).each(function(){																				
+							if(col==5)
+							{
+								col=0;
+								return false;												
+							}
+							var haystack=this.toString().toUpperCase();															
+							
+							if (haystack.indexOf(needle)!=-1) {															
+								
+								if(!hit)							
+									clase='matched_active';														
+								else							
+									clase='matched';			
+								
+								td = container.handsontable('getCell', row, col);			
+								
+								
+								td.className = clase
+								
+								// $('table.htCore tbody').children(':eq('+row+')').addClass(clase);
+								hit=true;							
+							}
+							
+							++col;
+						});
+						++row;
+					});
+					if(hit)
+					{															
+						offset=($('.matched_active:first').index())*delta;
+						$('.dragdealer vertical').animate({ scrollTop: offset });		
+					}
+					else
+					{
+						alert('El item no fue encontrado');
+						$('#buscar').val('');
+						$('.dragdealer vertical').animate({ scrollTop: 0 });	
+					}
+				}
+				else
+				{									
+					offset=($('.matched:first').index())*delta;
+					if($('.matched').length<=2)
+						filtrado=false;
+					$('.matched_active').removeClass('matched_active');	
+					$('.matched:first').addClass('matched_active');
+					$('.matched:first').removeClass('matched');											
+					
+					$('.dragdealer vertical').animate({ scrollTop: offset });						
+				}				
+				break;
+			default:
+				filtrado=false;
+				break;				
+			}					
+		});		
+	}
+	
 	$(document).ready(function () {
 	
 		var node;
 	
-		$(document).on("change", "select#auditorsala", function(event){
+		$(document).on("change", "#auditorsala", function(event){
 			
 			// $(this).parent().append("<img class='loader' alt='' style='float:right;margin-left:0px' src='{{ asset('bundles/cademadmin/images/loader-minitrans.gif') }}'  >");	
 			$.loader({
@@ -90,6 +251,34 @@
 			});
 			return false;
 		});
+		
+		container = $("#dataTable");				
+
+		Handsontable.cellLookup.renderer.auditorsalaRenderer = auditorsalaRenderer; //maps function to lookup string			
+			
+		container.handsontable({
+			// data: [['']],
+			// fixedRowsTop: 1,
+			// fixedColumnsLeft: 1,
+			colWidths: 207,
+			// fixedColumnsLeft: 5,
+			manualColumnResize: true,
+			colHeaders: true,
+			colHeaders: ['Auditor','Folio','Cadena','Canal','Dirección','Comuna'],								
+			cells: function (row, col, prop) {
+				if(col<1)
+				{					
+					var cellProperties = {};												 
+					cellProperties.renderer = "auditorsalaRenderer"; //uses lookup map									
+					return cellProperties;
+				}			
+			},
+			fillHandle: false,
+			data: data,
+			columnSorting: true,
+		});	
+				
+		listenerFiltro();		
 	
 	});
 	</script>
